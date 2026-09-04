@@ -1,0 +1,224 @@
+/* ============================================================================
+   Тема варианта Б «строго по ТЗ и макету» (VARIANT=tz). Подключается ПОСЛЕ
+   site.css и переопределяет только то, что расходится с ТЗ §3: белый фон,
+   холодный графит и стальные серые вместо тёплого цеха, один акцент, без
+   тёмных секций на главной (графит остаётся у CTA и подвала). Компоненты
+   и внутренние страницы — общие с вариантом А.
+   ========================================================================= */
+
+/* 01 Токены: холодные нейтрали «металл», радиусы 4px, тонкие рамки ---------- */
+body.variant-tz {
+  --gray-50: #f6f7f8;  --gray-50: oklch(97.5% 0.003 250);
+  --gray-100: #eef0f2; --gray-100: oklch(95% 0.004 250);
+  --gray-200: #dfe2e6; --gray-200: oklch(90% 0.006 250);
+  --gray-300: #c6cbd1; --gray-300: oklch(82% 0.008 250);
+  --gray-400: #9aa1a9; --gray-400: oklch(69% 0.01 250);
+  --gray-600: #636a73; --gray-600: oklch(50% 0.012 250);
+  --gray-800: #33373d; --gray-800: oklch(31% 0.012 250);
+  --gray-900: #1e2126; --gray-900: oklch(22% 0.012 250);
+  --gray-950: #15171a; --gray-950: oklch(17% 0.01 250);
+  --paper: var(--gray-0);
+  --paper-2: var(--gray-50);
+  --paper-3: var(--gray-100);
+  --ink: var(--gray-900);
+  --ink-2: var(--gray-800);
+  --muted: var(--gray-600);
+  --line: var(--gray-200);
+  --line-2: var(--gray-300);
+  --accent-soft: #fbeadb; --accent-soft: oklch(94% 0.04 60);
+  --tint: var(--paper-2);
+  --tint-2: var(--paper-3);
+  --mut: var(--muted);
+  --r-1: 3px;
+  --r-2: 4px;
+  --r-3: 8px;
+  --shadow-2: 0 8px 24px oklch(22% 0.012 250 / 0.08);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* 02 Шапка: светлая полоса контактов, плоское меню из восьми пунктов ---------- */
+.variant-tz .topbar { color-scheme: light; --paper: var(--gray-50); --ink: var(--gray-900); --muted: var(--gray-600); --line: var(--gray-200); background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
+.variant-tz .topbar__link { color: var(--gray-900); }
+.variant-tz .nav { gap: 0; }
+.variant-tz .nav__link { padding: 0.55rem 0.5rem; font-size: 0.84rem; white-space: nowrap; }
+.variant-tz .header__inner { gap: var(--space-m); }
+.variant-tz .header__actions { gap: 0.5rem; }
+.variant-tz .header .header__pres { padding-inline: 0.9rem; font-size: 0.86rem; }
+.variant-tz .header .header__cta { padding-inline: 1rem; font-size: 0.86rem; }
+.variant-tz .header__inner { flex-wrap: nowrap; }
+.variant-tz .topbar__note { font-size: 0.66rem; }
+@media (max-width: 1360px) { .variant-tz .header .header__pres { display: none; } }
+@media (max-width: 1180px) {
+  .variant-tz .nav, .variant-tz .header .header__cta { display: none; }
+  .variant-tz .burger { display: inline-flex; }
+}
+
+/* 03 Первый экран: текст слева, фото каркаса справа (макет, блок 2) ----------- */
+.tzhero { padding-block: var(--space-xl-2xl) var(--space-l-xl); background: var(--paper); }
+.tzhero__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: var(--space-xl); align-items: center; }
+.tzhero__brand { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-s); }
+.tzhero__title { font-size: var(--step-5); line-height: 1.04; letter-spacing: -0.025em; margin: 0 0 var(--space-m); max-width: 15ch; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; }
+.tzhero__slogan { font-family: var(--f-d); font-weight: 700; font-size: var(--step-1); margin: 0 0 var(--space-s); color: var(--ink); }
+.tzhero__lead { font-size: var(--step-0); color: var(--ink-2); max-width: 46ch; margin: 0 0 var(--space-l); }
+.tzhero__facts { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: var(--space-l); padding-top: var(--space-s); border-top: 1px solid var(--line); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.tzhero__media { position: relative; margin: 0; }
+.tzhero__media picture, .tzhero__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 35%; border-radius: var(--r-2); }
+.tzhero__media::before { content: ""; position: absolute; left: -12px; top: 12px; bottom: -12px; width: 4px; background: var(--accent); }
+.tzhero__media::after { content: ""; position: absolute; left: -12px; bottom: -12px; width: 40%; height: 4px; background: var(--accent); }
+.tzhero__cap { margin-top: 0.75rem; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* 04 Показатели с иконками (блок 3) ------------------------------------------ */
+.variant-tz .kpi__item { background: var(--paper); border-color: var(--line); }
+.variant-tz .kpi__icon { background: var(--accent-soft); color: var(--accent-deep); }
+.variant-tz .kpi__val { font-size: var(--step-2); white-space: nowrap; }
+.variant-tz .kpi__item { padding: var(--space-m) var(--space-s) var(--space-m) var(--space-m); }
+
+/* 05 Карточки решений и объектов (блоки 4, 6) ----------------------------------- */
+.tzcard .card__media { aspect-ratio: 4 / 3; }
+.tzcard__btn { align-self: flex-start; margin-top: auto; padding: 0.55rem 0.9rem; min-height: 40px; font-size: 0.85rem; gap: 0.4rem; }
+.tzcard:hover .tzcard__btn { background: var(--paper-2); }
+.tzcard__spec { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: var(--space-s) var(--space-m); background: var(--gray-900); color: var(--gray-100);
+  background-image: linear-gradient(var(--gray-800) 1px, transparent 1px), linear-gradient(90deg, var(--gray-800) 1px, transparent 1px); background-size: 28px 28px; }
+.tzcard__spec-num { font-size: 0.72rem; letter-spacing: 0.12em; color: var(--accent); }
+.tzcard__spec-list { display: grid; gap: 0.35rem; font-size: 0.8rem; color: var(--gray-100); }
+.tzcard__spec-list span { padding-left: 0.9rem; position: relative; }
+.tzcard__spec-list span::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 5px; height: 5px; background: var(--accent); }
+.tzcard__spec-note { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); }
+.variant-tz .card { box-shadow: none; }
+.variant-tz a.card:hover { box-shadow: var(--shadow-2); border-color: var(--line); transform: translateY(-2px); }
+
+/* 06 Пять шагов с иконками (блок 8) ------------------------------------------- */
+.tzsteps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-s); position: relative; }
+.tzsteps::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 2px; background: var(--line); }
+.tzsteps__item { position: relative; display: grid; gap: 0.35rem; align-content: start; padding: var(--space-m) var(--space-m) var(--space-m) 0; }
+.tzsteps__icon { display: inline-flex; width: 60px; height: 60px; align-items: center; justify-content: center; border-radius: 50%; background: var(--paper); border: 2px solid var(--accent); color: var(--accent-deep); margin-bottom: 0.5rem; }
+.tzsteps__icon svg { width: 30px; height: 30px; }
+.tzsteps__num { font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); }
+.tzsteps__title { font-family: var(--f-d); font-weight: 700; font-size: var(--step-0); }
+.tzsteps__text { font-size: 0.88rem; color: var(--ink-2); }
+.tzsteps__dur { font-size: 0.72rem; color: var(--accent-deep); }
+
+/* 07 О заводе: текст + 4 фото 2×2 (блок 9) --------------------------------------- */
+.about-band--tz .about-band__photos figure:nth-child(1) { grid-column: span 1; aspect-ratio: 4 / 3; }
+.about-band--tz .about-band__photo { aspect-ratio: 4 / 3; }
+.about-band__cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.45rem 0.7rem; background: linear-gradient(0deg, oklch(17% 0.01 250 / 0.85), transparent); color: var(--gray-0); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* 08 Мобильная хореография ------------------------------------------------------ */
+@media (max-width: 1020px) {
+  .tzsteps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tzsteps::before { display: none; }
+}
+@media (max-width: 860px) {
+  .tzhero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-l); }
+  .tzhero__media { order: -1; margin-left: 12px; }
+  .tzhero__media picture, .tzhero__media img { aspect-ratio: 16 / 10; }
+  .tzhero__title { font-size: var(--step-5); max-width: 100%; }
+}
+@media (max-width: 720px) {
+  .tzsteps { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .tzsteps__item { grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: "i n" "i t" "i x" "i d"; gap: 0.15rem 0.9rem; padding: var(--space-s) 0; border-bottom: 1px solid var(--line); }
+  .tzsteps__icon { grid-area: i; width: 48px; height: 48px; margin: 0; }
+  .tzsteps__icon svg { width: 24px; height: 24px; }
+  .tzsteps__num { grid-area: n; }
+  .tzsteps__title { grid-area: t; }
+  .tzsteps__text { grid-area: x; }
+  .tzsteps__dur { grid-area: d; }
+  .tzhero { padding-top: var(--space-l); }
+  .tzhero__title { font-size: clamp(1.8rem, 8vw, 2.3rem); hyphens: auto; -webkit-hyphens: auto; }
+  .variant-tz .kpi__val { font-size: var(--step-2); }
+  .tzhero__facts { display: grid; gap: 0.4rem; }
+}
+
+/* Мобильный: графитовые «листы» без фото — компактнее, чтобы 9 карточек не тянулись */
+@media (max-width: 640px) {
+  .tzcard .card__media:has(.tzcard__spec) { aspect-ratio: 16 / 7; }
+  .tzcard__spec { padding: var(--space-xs) var(--space-s); }
+  .tzcard__spec-list { font-size: 0.74rem; gap: 0.2rem; }
+}
+
+.tzkpi__label { margin-bottom: var(--space-m); }
+.tzhero__text { display: flex; flex-direction: column; }
+.tzhero__text > * { margin-top: 0; }
+.tzhero__brand { margin-bottom: var(--space-s); }
+.tzhero__title { margin-bottom: var(--space-m); }
+.tzhero__slogan { margin-bottom: var(--space-s); }
+.tzhero__lead { margin-bottom: var(--space-l); }
+@media (max-width: 720px) {
+  .tzhero__lead { order: 4; margin: var(--space-m) 0 0; }
+  .tzhero__facts { order: 5; }
+}
+
+/* 09 Лента сортамента: сечения ПСУ и ПС в масштабе по высоте (ТЗ §3) --------- */
+.tzsort { border-top: 1px solid var(--line); }
+.tzsort__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-s) var(--space-xl); align-items: end; margin-bottom: var(--space-l); }
+.tzsort__head .eyebrow { grid-column: 1; margin: 0; }
+.tzsort__text { grid-column: 1; grid-row: 2; margin: 0; max-width: 62ch; color: var(--ink-2); }
+.tzsort__head .arrow-link { grid-column: 2; grid-row: 2; white-space: nowrap; }
+.sortament { display: grid; gap: var(--space-s); }
+.sortament__row { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: var(--space-xs); align-items: end; padding-bottom: var(--space-xs); border-bottom: 1px solid var(--line); }
+.sortament__item { margin: 0; display: grid; justify-items: center; gap: 0.4rem; }
+.sortament__sec { width: 100%; height: calc(40px + var(--k) * 80px); color: var(--ink); }
+.sortament__sec path { fill: none; stroke: currentColor; stroke-width: 8; vector-effect: non-scaling-stroke; }
+.sortament__item:last-child .sortament__sec { color: var(--accent-deep); }
+.sortament__cap { display: grid; justify-items: center; gap: 0.1rem; font-size: 0.62rem; letter-spacing: 0.04em; color: var(--muted); text-align: center; }
+.sortament__cap b { color: var(--ink); font-weight: 500; }
+.sortament__note { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+/* 10 Пиктограмма и лист карточки без фото ------------------------------------ */
+.tzcard__spec { background: var(--paper-2); color: var(--ink); background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 24px 24px; align-items: center; justify-items: center; display: grid; grid-template-rows: auto 1fr auto; }
+.tzcard__spec-num { justify-self: start; color: var(--muted); }
+.tzcard__pict { width: 132px; height: 86px; color: var(--ink-2); }
+.tzcard__spec-list { justify-self: start; color: var(--ink-2); }
+.tzcard__spec-list span::before { background: var(--accent); }
+.tzcard__spec-note { justify-self: start; color: var(--muted); }
+
+/* 11 Типовые как листы КМ ---------------------------------------------------- */
+.typ-card__scheme { display: block; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+.ts { width: 100%; height: auto; display: block; }
+.ts-grid line { stroke: var(--line); stroke-width: 0.6; }
+.ts-ground { stroke: var(--line-2); stroke-width: 1.2; }
+.ts-main { stroke: var(--ink); stroke-width: 1.8; fill: none; }
+.ts-web line { stroke: var(--line-2); stroke-width: 1; }
+.ts-fill { fill: var(--accent-soft); stroke: none; }
+.ts-dim line { stroke: var(--accent); stroke-width: 1.1; }
+.ts-dim text { font-family: var(--f-m); font-size: 9px; fill: var(--accent-deep); letter-spacing: 0.06em; }
+.ts-note { font-family: var(--f-m); font-size: 8.5px; fill: var(--muted); letter-spacing: 0.08em; }
+
+/* 12 Паспорт площадки -------------------------------------------------------- */
+.tzpass { display: grid; gap: 0; margin: var(--space-s) 0 var(--space-l); border-top: 1px solid var(--line); }
+.tzpass div { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr); gap: var(--space-s); padding: 0.55rem 0; border-bottom: 1px solid var(--line); }
+.tzpass dt { color: var(--muted); font-size: 0.88rem; }
+.tzpass dd { margin: 0; font-size: 0.92rem; color: var(--ink); }
+
+@media (max-width: 1020px) {
+  .sortament__row { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: var(--space-s); }
+  .sortament__item:nth-child(n+6) { display: none; }
+  .tzsort__head { grid-template-columns: minmax(0, 1fr); }
+  .tzsort__head .arrow-link { grid-column: 1; grid-row: 3; }
+}
+@media (max-width: 720px) {
+  .sortament__row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sortament__item:nth-child(n+5) { display: none; }
+  .tzpass div { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+  .tzcard__pict { width: 72px; height: 48px; }
+}
+
+/* 13 Мобильный первый экран: заголовок и CTA до фото (ТЗ §2 п.5, §20) */
+@media (max-width: 860px) {
+  .tzhero__grid { display: flex; flex-direction: column; }
+  .tzhero__media { order: 2; margin: var(--space-m) 0 0 12px; }
+  .tzhero__text { display: contents; }
+  .tzhero__brand { order: 0; }
+  .tzhero__title { order: 0; }
+  .tzhero__slogan { order: 0; }
+  .tzhero__lead { order: 3; margin: var(--space-m) 0 0; }
+  .tzhero__facts { order: 4; }
+  .tzhero .btn-row { order: 1; }
+}
+@media (max-width: 720px) {
+  .tzcard__pict { width: 104px; height: 68px; }
+}@media (max-width: 860px) {
+  .tzhero .btn-row { flex-direction: column; align-items: stretch; width: 100%; }
+  .tzhero .btn-row .btn { width: 100%; }
+}

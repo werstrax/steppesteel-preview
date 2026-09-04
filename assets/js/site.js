@@ -518,7 +518,8 @@
       }).observe(footer);
     }
     function update() {
-      var pastHero = window.scrollY > window.innerHeight * 0.7;
+      // ТЗ §18/§20: кнопки связи под рукой с первого экрана, а не после прокрутки.
+      var pastHero = window.scrollY > window.innerHeight * 0.12;
       bar.classList.toggle('is-visible', pastHero && !nearFooter);
     }
     window.addEventListener('scroll', update, { passive: true });

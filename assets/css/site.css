@@ -1121,3 +1121,6 @@ select.field__input { appearance: none; background-image: linear-gradient(45deg,
 }
 
 @media (max-width: 720px) { h1, .page-hero__title { hyphens: auto; -webkit-hyphens: auto; } }
+
+/* Манифест: приставка «до» перед числом */
+.manifest__val .manifest__pre { margin: 0 0.15em 0 0; font-weight: 700; }

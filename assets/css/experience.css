@@ -70,3 +70,13 @@
 
 /* Identify generated category images. */
 .solution-image-note{position:absolute;left:12px;bottom:12px;right:auto;max-width:calc(100% - 24px);z-index:2;background:#14232cdd;color:#fff;font:400 12px/1.4 var(--f-t);padding:6px 9px;letter-spacing:0;pointer-events:none}
+
+/* Каталог: остальные шесть типов зданий фото-карточками (07.09: «всё должно быть», не только зерно) */
+.pro-solutions--all{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-items:start;margin-top:40px;padding-top:32px;border-top:1px solid var(--line)}
+.pro-solutions--all .pro-solution:first-child{grid-column:auto}
+.pro-solutions--all .pro-solution:first-child .pro-solution__photo,.pro-solutions--all .pro-solution:not(:first-child) .pro-solution__photo{aspect-ratio:3/2}
+.pro-solutions--all .pro-solution h3,.pro-solutions--all .pro-solution:first-child h3{font-size:clamp(18px,1.4vw,21px)}
+.pro-solutions--all .pro-solution__body{min-height:0;padding:16px 0 18px}
+.pro-solutions--all .pro-solution p{font-size:13px}
+@media(max-width:1100px){.pro-solutions--all{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.pro-solutions--all .pro-solution:first-child{grid-column:auto}.pro-solutions--all .pro-solution:first-child .pro-solution__photo{aspect-ratio:3/2}}
+@media(max-width:640px){.pro-solutions--all{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px;padding-top:24px}.pro-solutions--all .pro-solution .pro-solution__photo,.pro-solutions--all .pro-solution:first-child .pro-solution__photo{aspect-ratio:4/3}.pro-solutions--all .pro-solution h3,.pro-solutions--all .pro-solution:first-child h3{font-size:16px}.pro-solutions--all .pro-solution p{display:none}.pro-solutions--all .pro-solution__body{padding:12px 0 14px;grid-template-columns:1fr 24px}.pro-solutions--all .pro-solution__index{font-size:9px;padding:4px 6px;top:8px;left:8px}}

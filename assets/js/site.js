@@ -358,32 +358,49 @@
 
   function openWa(text) {
     var url = 'https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(text);
-    var w = window.open(url, '_blank', 'noopener');
-    if (!w) location.href = url;
+    // С флагом 'noopener' window.open по спецификации всегда возвращает null,
+    // и WhatsApp открывался дважды: вкладкой и в текущем окне. Отвязываем вручную.
+    var w = window.open(url, '_blank');
+    if (w) { try { w.opener = null; } catch (e) { /* чужой домен */ } }
+    else location.href = url;
   }
+
+  /* Источник заявки (ТЗ §24): метки первого захода на ЛЮБУЮ страницу сайта,
+     а не только на /raschet/. Живёт во вкладке, на сервер не уходит. */
+  var SRC_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'yclid', 'gclid', 'fbclid'];
+  (function captureSource() {
+    try {
+      var q = new URLSearchParams(location.search);
+      if (SRC_KEYS.some(function (k) { return q.get(k); }) && !sessionStorage.getItem('ss-landing')) {
+        SRC_KEYS.forEach(function (k) { if (q.get(k)) sessionStorage.setItem('ss-' + k, q.get(k)); });
+      }
+      if (!sessionStorage.getItem('ss-landing')) sessionStorage.setItem('ss-landing', location.pathname);
+      var ref = document.referrer;
+      if (ref && !sessionStorage.getItem('ss-from')) {
+        var host = '';
+        try { host = new URL(ref).host; } catch (e) { /* битый referrer */ }
+        if (host && host !== location.host) sessionStorage.setItem('ss-from', ref);
+      }
+    } catch (e) { /* без хранилища — без источника */ }
+  })();
 
   /* Откуда пришла заявка — для менеджера и аналитики (ТЗ §24) */
   function sourceLine() {
     try {
       var utm = ['utm_source', 'utm_medium', 'utm_campaign'].map(function (k) { return sessionStorage.getItem('ss-' + k); }).filter(Boolean).join(' / ');
+      var click = ['yclid', 'gclid', 'fbclid'].filter(function (k) { return sessionStorage.getItem('ss-' + k); });
       var from = sessionStorage.getItem('ss-from') || '';
+      var landing = sessionStorage.getItem('ss-landing') || '';
       var page = location.pathname + location.search;
-      return (utm ? utm + ' · ' : '') + (from ? 'с ' + from.replace(/^https?:\/\//, '') + ' · ' : '') + 'страница ' + page;
+      return (utm ? utm + ' · ' : '') + (click.length ? click.join('+') + ' · ' : '') +
+        (from ? 'с ' + from.replace(/^https?:\/\//, '') + ' · ' : '') +
+        (landing && landing !== location.pathname ? 'вход ' + landing + ' · ' : '') + 'страница ' + page;
     } catch (e) { return location.pathname; }
   }
 
   (function calcForm() {
     var form = $('[data-calc-form]');
     if (!form) return;
-
-    // Источник заявки (ТЗ §24): utm первого визита + страница, с которой пришли
-    try {
-      var q = new URLSearchParams(location.search);
-      ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function (k) {
-        if (q.get(k)) sessionStorage.setItem('ss-' + k, q.get(k));
-      });
-      if (document.referrer && !sessionStorage.getItem('ss-from')) sessionStorage.setItem('ss-from', document.referrer);
-    } catch (e) { /* без хранилища — без источника */ }
 
     // Предзаполнение из ?type= и ?tons=
     try {

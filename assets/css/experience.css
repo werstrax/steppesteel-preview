@@ -16,7 +16,9 @@
 .document-preview__image:hover img{transform:scale(1.025)}
 .document-preview--certificate .document-preview__image{padding:22px}
 .document-preview--certificate .document-preview__image img{width:auto;max-width:85%;height:100%;object-fit:contain;box-shadow:0 6px 20px #16202b20}
-.document-preview__tag{position:absolute;left:12px;top:12px;background:#fff;padding:6px 8px;font-size:10px;letter-spacing:.05em;color:#273540}
+.document-preview__tag{position:absolute;left:12px;top:auto;bottom:12px;background:#fff;padding:6px 8px;font-size:10px;letter-spacing:.05em;color:#273540}
+/* Обложки презентаций 16:9 — показываем целиком, без обрезки названия */
+.document-preview:not(.document-preview--certificate) .document-preview__image{aspect-ratio:16/9}
 .document-preview__body{padding:24px;display:flex;flex:1;flex-direction:column}
 .document-preview__meta{font-size:12px;color:#65727d;margin:0 0 16px}
 .document-preview h3{font-size:23px;font-weight:500;line-height:1.25;margin:0 0 14px}

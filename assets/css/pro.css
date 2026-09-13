@@ -171,3 +171,15 @@
 .project-cover strong{font:400 clamp(30px,4vw,56px) var(--f-d);letter-spacing:-.04em}
 @media(max-width:1100px){.pro-solutions{grid-template-columns:1fr 1fr}.pro-solution:first-child{grid-column:1/-1}.pro-solution:first-child .pro-solution__photo{aspect-ratio:2}.pro-solution__body{min-height:110px}.pro-audience{border-top:1px solid var(--line)}}
 @media(max-width:640px){.pro-solutions{grid-template-columns:1fr;gap:25px}.pro-solution:first-child{grid-column:auto}.pro-solution:first-child .pro-solution__photo,.pro-solution:not(:first-child) .pro-solution__photo{aspect-ratio:1.5}.pro-solution:first-child h3{font-size:26px}.pro-solution__body{min-height:0}.pro-proof__value{font-size:35px}.pro-home .section-head{margin-bottom:28px}.pro-factory__photo{min-height:320px}.pro-home .section-head__title{font-size:31px}.pro-typical{border-top:2px solid var(--ink)}.pro-audience{padding:24px 8px}.pro-audience__num{margin-bottom:22px}.pro-home .cta-band__title{font-size:38px}.pro-home .cta-band__inner{gap:28px}}
+
+/* Рендер каркаса tech-hub (разбор 11.09.2026, п. 16). Кадр из презентации завода
+   был извлечён без родной маски прозрачности — отсюда чёрный прямоугольник с
+   пятнами в первом экране /tekhnologii/ и /proektirovshchikam/. Кадр переразобран
+   с чистой альфой, поэтому его нельзя обрезать по краям (object-fit:cover):
+   вписываем целиком в светлую подложку. */
+.tech-blueprint{background:var(--gray-50)}
+.tech-blueprint picture{display:block}
+.tech-blueprint img{width:100%;max-height:520px;object-fit:contain;padding:clamp(14px,2.6vw,30px) clamp(14px,3vw,40px)}
+.tech-blueprint__cap{background:var(--gray-50);color:var(--gray-600);border-top:1px solid var(--gray-200)}
+.page-hero--photo .page-hero__media img[src*="/tech-hub-"]{background:var(--gray-50);object-fit:contain;padding:clamp(18px,3vw,42px)}
+.tech-media__item img[src*="/tech-hub-"]{background:var(--gray-50);object-fit:contain;padding:14px}

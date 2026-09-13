@@ -27,15 +27,8 @@
   src: url('../fonts/golos-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300 700; font-display: swap;
-  src: url('../fonts/inter-cyrillic.woff2') format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300 700; font-display: swap;
-  src: url('../fonts/inter-cyrillic-ext.woff2') format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300 700; font-display: swap;
-  src: url('../fonts/inter-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Inter удалён (разбор 11.09, п.20): текстовый шрифт сайта — Golos Text,
+   --f-t перекрыт в pro.css, ни одно правило Inter не использовало. */
 
 @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 500; font-display: swap;
   src: url('../fonts/jetbrainsmono-cyrillic.woff2') format('woff2');
@@ -49,7 +42,6 @@
 
 /* Подогнанный фолбэк — текст не прыгает при подмене шрифта */
 @font-face { font-family: 'Golos Fallback'; src: local('Arial'), local('Roboto'); size-adjust: 103%; ascent-override: 93%; descent-override: 24%; }
-@font-face { font-family: 'Inter Fallback'; src: local('Arial'), local('Roboto'); size-adjust: 107%; ascent-override: 90%; descent-override: 22%; }
 
 /* 02 Токены -------------------------------------------------------------- */
 /* Три слоя: примитивы → семантика → компоненты. Ни одного HEX ниже этого
@@ -106,7 +98,7 @@
 
   /* Шрифты */
   --f-d: 'Golos Text', 'Golos Fallback', system-ui, sans-serif;
-  --f-t: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --f-t: 'Golos Text', 'Golos Fallback', system-ui, sans-serif;
   --f-m: 'JetBrains Mono', ui-monospace, Consolas, monospace;
 
   /* Типошкала utopia (320/16 × 1.2 → 1240/18 × 1.25) */
@@ -246,7 +238,7 @@ h4, .h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 .sheet-note { font-size: var(--step--1); color: var(--muted); margin-top: var(--space-s); }
 .link { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 0.15em; }
 .arrow-link {
-  display: inline-flex; align-items: center; gap: 0.5rem;
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px;
   font-family: var(--f-d); font-weight: 700; font-size: var(--step--1);
   color: var(--accent-deep); text-transform: none;
 }
@@ -898,7 +890,8 @@ html:not(.js) .mbar { transform: none; }
 .mbar__btn--wa svg { color: var(--green-wa); }
 .mbar__btn--cta { background: var(--orange-500); color: var(--gray-950); }
 .mbar__btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 720px) { .mbar { display: grid; } body { padding-bottom: 56px; } }
+/* Отступ под панель — у подвала, а не у body: иначе под подвалом белая полоса */
+@media (max-width: 720px) { .mbar { display: grid; } .footer { padding-bottom: calc(var(--space-l) + 56px + env(safe-area-inset-bottom, 0px)); } }
 
 /* 13 Таблицы --------------------------------------------------------------- */
 
@@ -1121,6 +1114,11 @@ select.field__input { appearance: none; background-image: linear-gradient(45deg,
 }
 
 @media (max-width: 720px) { h1, .page-hero__title { hyphens: auto; -webkit-hyphens: auto; } }
+/* H1 посадочных на телефоне: две-три строки вместо полэкрана */
+@media (max-width: 480px) { .page-hero__title { font-size: clamp(30px, 8.4vw, 42px); } }
+
+/* Строка-оффер под лидом первого экрана: «Расчёт и КП за 24 часа · WhatsApp · …» */
+.page-hero__offer { margin: var(--space-s) 0 0; font-size: 0.8rem; line-height: 1.5; letter-spacing: 0.02em; color: var(--muted); max-width: 56ch; }
 
 /* Манифест: приставка «до» перед числом */
 .manifest__val .manifest__pre { margin: 0 0.15em 0 0; font-weight: 700; }

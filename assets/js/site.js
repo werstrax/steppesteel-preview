@@ -341,6 +341,8 @@
   function showStatus(form, text, isError) {
     var st = $('[data-form-status]', form);
     if (!st) return;
+    var box = st.closest('[data-form-done]');
+    if (box) box.hidden = false;
     st.hidden = false;
     st.textContent = text;
     st.classList.toggle('is-error', Boolean(isError));
@@ -402,25 +404,49 @@
     var form = $('[data-calc-form]');
     if (!form) return;
 
-    // Предзаполнение из ?type= и ?tons=
+    // Предзаполнение из ?type=, ?tons=, ?w=, ?l=.
+    // type — slug решения (value опций) или старые коды из ссылок и калькулятора.
+    // В комментарий только дописываем: введённое пользователем не затираем.
     try {
       var params = new URLSearchParams(location.search);
       var type = params.get('type');
       var map = { grain: 'zernohranilishcha', warehouse: 'angary', workshop: 'proizvodstvennye-zdaniya' };
       var slug = map[type] || type;
       var sel = form.elements.purpose;
-      if (slug && sel && $$('option', sel).some(function (o) { return o.value === slug; })) sel.value = slug;
+      var comment = form.elements.comment;
+      var addComment = function (line) {
+        if (!comment || comment.value.indexOf(line) !== -1) return;
+        comment.value = comment.value ? comment.value.replace(/\s+$/, '') + '\n' + line : line;
+      };
+      var hasOption = function (v) {
+        return sel && $$('option', sel).some(function (o) { return o.value === v; });
+      };
+      if (slug && hasOption(slug)) sel.value = slug;
       if (type === 'project') {
         var radio = form.querySelector('input[name="mode"][value="project"]');
         if (radio) radio.checked = true;
       }
-      if (type === 'builder' && form.elements.comment && !form.elements.comment.value) {
-        form.elements.comment.value = 'Строительная компания: прошу условия сотрудничества по изготовлению металлокаркаса.';
-        if (sel) sel.value = 'other';
+      if (type === 'builder') {
+        addComment('Строительная компания: прошу условия сотрудничества по изготовлению металлокаркаса.');
+        if (hasOption('other')) sel.value = 'other';
       }
-      var tons = params.get('tons');
-      if (tons && form.elements.comment && !form.elements.comment.value) {
-        form.elements.comment.value = 'Объём хранения: ' + tons + ' т';
+      var tons = parseFloat(String(params.get('tons') || '').replace(',', '.'));
+      if (tons > 0) addComment('Объём хранения: ' + tons + '\u00a0т');
+
+      // Размеры типового решения: ?w= ширина, ?l= длина (в метрах)
+      var sizeParam = function (key, field) {
+        var n = parseFloat(String(params.get(key) || '').replace(',', '.'));
+        if (!(n > 0)) return '';
+        var input = form.elements[field];
+        if (input && !input.value) input.value = String(n);
+        return String(n).replace('.', ',');
+      };
+      var w = sizeParam('w', 'width');
+      var l = sizeParam('l', 'len');
+      if (w || l) {
+        var kind = sel && sel.value && sel.value !== 'other' ? sel.options[sel.selectedIndex].text : '';
+        var dims = w && l ? w + ' × ' + l + '\u00a0м' : (w ? 'ширина ' + w : 'длина ' + l) + '\u00a0м';
+        addComment('Типовое решение: ' + (kind ? kind + ', ' : '') + dims);
       }
     } catch (e) { /* строка запроса не критична */ }
 
@@ -437,6 +463,57 @@
       });
     }
 
+    /* Десктоп: WhatsApp часто не установлен, поэтому рядом со статусом —
+       та же заявка письмом и кнопка копирования текста. */
+    var alt = $('[data-form-alt]', form);
+    var mailLink = alt && $('[data-form-mail]', alt);
+    var copyBtn = alt && $('[data-form-copy]', alt);
+    var lastText = '';
+
+    function showAlt(text) {
+      lastText = text;
+      var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      var email = form.getAttribute('data-email');
+      if (!alt || !fine || !email) return;
+      if (mailLink) {
+        mailLink.setAttribute('href', 'mailto:' + email +
+          '?subject=' + encodeURIComponent('Заявка на расчёт с сайта') +
+          '&body=' + encodeURIComponent(text.replace(/\n/g, '\r\n')));
+      }
+      alt.hidden = false;
+    }
+
+    function legacyCopy(text) {
+      return new Promise(function (resolve, reject) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.select();
+        var done = false;
+        try { done = document.execCommand('copy'); } catch (err) { /* старый браузер */ }
+        ta.remove();
+        if (done) resolve(); else reject(new Error('copy'));
+      });
+    }
+
+    if (copyBtn) {
+      var copyLabel = copyBtn.textContent;
+      copyBtn.addEventListener('click', function () {
+        if (!lastText) return;
+        var job = navigator.clipboard && window.isSecureContext
+          ? navigator.clipboard.writeText(lastText).catch(function () { return legacyCopy(lastText); })
+          : legacyCopy(lastText);
+        job.then(
+          function () { copyBtn.textContent = 'Текст скопирован'; },
+          function () { copyBtn.textContent = 'Не получилось — отправьте на почту'; }
+        ).then(function () {
+          setTimeout(function () { copyBtn.textContent = copyLabel; }, 2500);
+        });
+      });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (fieldVal(form, 'website')) return; // honeypot
@@ -445,13 +522,15 @@
       var purposeSel = form.elements.purpose;
       var purposeText = purposeSel.options[purposeSel.selectedIndex] ? purposeSel.options[purposeSel.selectedIndex].text : '';
       var mode = form.querySelector('input[name="mode"]:checked');
+      var isProject = Boolean(mode && mode.value === 'project');
       var size = ['width', 'len', 'height'].map(function (n) { return fieldVal(form, n); });
       var hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+      var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
 
       var lines = [
         'Заявка на расчёт с сайта Steppe Steel',
         '',
-        'Тип: ' + (mode && mode.value === 'project' ? 'есть готовый проект' : 'расчёт с нуля'),
+        'Тип: ' + (isProject ? 'есть готовый проект' : 'расчёт с нуля'),
         'Назначение: ' + (purposeText || '—'),
         fieldVal(form, 'region') && 'Регион: ' + fieldVal(form, 'region'),
         (size[0] || size[1] || size[2]) && 'Размеры (Ш×Д×В): ' + (size[0] || '—') + ' × ' + (size[1] || '—') + ' × ' + (size[2] || '—') + ' м',
@@ -462,17 +541,20 @@
         'Телефон: ' + fieldVal(form, 'phone'),
         fieldVal(form, 'whatsapp') && 'WhatsApp: ' + fieldVal(form, 'whatsapp'),
         fieldVal(form, 'email') && 'E-mail: ' + fieldVal(form, 'email'),
-        hasFile && 'Проект: прикреплю файлом в чате (' + fileInput.files[0].name + ')',
+        hasFile
+          ? 'Проект: прикреплю файлом в чате (' + fileInput.files[0].name + ')'
+          : isProject && !fileInput && 'Файл проекта: пришлю отдельно',
         '',
         'Источник: ' + sourceLine(),
       ].filter(Boolean);
+      var text = lines.join('\n');
 
       var endpoint = form.getAttribute('data-endpoint');
       goal('calc_submit', { purpose: purposeSel.value || 'other', source: sourceLine() });
 
       if (endpoint) {
         var fd = new FormData(form);
-        fd.append('message', lines.join('\n'));
+        fd.append('message', text);
         fetch(endpoint, { method: 'POST', body: fd })
           .then(function (r) {
             if (!r.ok) throw new Error(String(r.status));
@@ -480,16 +562,20 @@
           })
           .catch(function () {
             showStatus(form, 'Не получилось отправить на сервер — открываем WhatsApp с готовой заявкой.', true);
-            openWa(lines.join('\n'));
+            showAlt(text);
+            openWa(text);
           });
         return;
       }
 
-      openWa(lines.join('\n'));
-      showStatus(form,
-        hasFile
-          ? 'Открыли WhatsApp с текстом заявки. Прикрепите файл проекта прямо в чат — скрепка внизу.'
-          : 'Открыли WhatsApp с текстом заявки — остаётся нажать «Отправить». Если WhatsApp не установлен, напишите нам на почту.');
+      openWa(text);
+      var status = 'Открыли WhatsApp с текстом заявки — остаётся нажать «Отправить».';
+      if (hasFile || isProject) status += ' Затем пришлите файл проекта в этот же чат — скрепка внизу.';
+      status += fine
+        ? ' Если WhatsApp на компьютере нет — отправьте заявку на почту или скопируйте текст.'
+        : ' Если WhatsApp не установлен, напишите нам на почту.';
+      showStatus(form, status);
+      showAlt(text);
     });
   })();
 
@@ -573,5 +659,60 @@
       var sec = document.getElementById(id);
       if (sec) io.observe(sec);
     });
+  })();
+
+  /* --- Видео с объекта: кнопка «Смотреть», главы с перемоткой, нарезка в зоне видимости --- */
+  (function objectVideo() {
+    $$('[data-video-player]').forEach(function (box) {
+      var v = box.querySelector('video');
+      var btn = box.querySelector('[data-video-play]');
+      if (!v) return;
+      var scope = box.closest('section') || box.parentNode;
+      var chapters = $$('[data-video-seek]', scope);
+      var started = false;
+
+      function play() {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+        box.classList.add('is-playing');
+        if (!started) { started = true; goal('video_play'); }
+      }
+      function seek(t) {
+        if (v.readyState >= 1) { v.currentTime = t; play(); return; }
+        // preload="none": до первого запуска currentTime не применяется — стартуем через медиафрагмент #t=
+        var src = (v.currentSrc || (v.querySelector('source') || {}).src || v.getAttribute('src') || '').split('#')[0];
+        if (src) { v.src = src + '#t=' + t; v.load(); }
+        play();
+      }
+
+      // Штатные кнопки плеера — только после запуска: до него кадр закрывает кнопка «Смотреть»
+      v.removeAttribute('controls');
+      if (btn) btn.addEventListener('click', function () { play(); });
+      v.addEventListener('play', function () { box.classList.add('is-playing'); v.setAttribute('controls', ''); });
+
+      chapters.forEach(function (c) {
+        c.addEventListener('click', function () {
+          seek(parseFloat(c.getAttribute('data-video-seek')) || 0);
+          if (window.innerWidth < 900) box.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+        });
+      });
+      v.addEventListener('timeupdate', function () {
+        var t = v.currentTime, active = null;
+        chapters.forEach(function (c) { if (t >= (parseFloat(c.getAttribute('data-video-seek')) || 0)) active = c; });
+        chapters.forEach(function (c) { c.classList.toggle('is-active', c === active); });
+      });
+    });
+
+    // Нарезка без звука: играет только пока видна, при reduced-motion остаётся постер
+    var loops = $$('[data-video-loop] video');
+    if (!loops.length || reduced || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var lv = en.target;
+        if (en.isIntersecting) { var p = lv.play(); if (p && p.catch) p.catch(function () {}); }
+        else lv.pause();
+      });
+    }, { threshold: 0.25 });
+    loops.forEach(function (lv) { io.observe(lv); });
   })();
 })();

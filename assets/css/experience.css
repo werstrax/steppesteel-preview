@@ -5,7 +5,7 @@
 .factory-hero__inner{min-height:650px}
 .factory-hero__location{min-width:190px;font-size:10px}
 .factory-hero__location small{font-size:12px}
-.factory-hero__documents{display:inline-flex;color:#dbe2e7;font-size:13px;gap:12px;align-items:center;margin-top:24px}
+.factory-hero__documents{display:inline-flex;color:#dbe2e7;font-size:13px;gap:12px;align-items:center;margin-top:12px;min-height:44px}
 .factory-hero__documents:hover{color:#fff}
 
 .document-shelf{background:#f5f6f6}
@@ -86,3 +86,82 @@
 /* Первый экран: аэросъёмка комплекса зданий — здания в центре и справа, текст слева на небе/поле под затемнением */
 .factory-hero__image img{object-position:62% 58%}
 @media(max-width:640px){.factory-hero__image img{object-position:70% 60%}}
+
+/* Разбор 11.09, п. 2: обещание под кнопками первого экрана */
+.factory-hero__promise{margin:16px 0 0;max-width:46ch;font-size:13px;line-height:1.55;color:#d6dce0}
+@media(max-width:640px){.factory-hero__promise{font-size:12px;max-width:34ch;margin-top:14px}}
+
+/* П. 6: срок этапа моно-строкой над заголовком шага */
+.pro-process__term{display:block;font-size:11px;letter-spacing:.06em;line-height:1.4;color:var(--ink);margin:-6px 0 10px}
+@media(max-width:540px){.pro-process__term{margin:0 0 6px}}
+
+/* П. 11: типовое решение — карточка с двумя ссылками; вся карточка ведёт в расчёт */
+.pro-typical{position:relative}
+.pro-typical__links{display:flex;flex-direction:column;align-items:flex-start}
+.pro-typical__links a{min-height:44px;display:inline-flex;align-items:center}
+.pro-typical__cta::after{content:"";position:absolute;inset:0}
+.pro-typical__page{position:relative;z-index:1;margin-top:-6px;font-size:13px;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:.22em}
+.pro-typical__page:hover{color:var(--ink);text-decoration-color:currentColor}
+
+/* П. 10: «Приехать на завод» */
+.factory-visit{min-height:44px}
+.pro-about .btn-row{align-items:center;column-gap:24px}
+
+/* П. 10: план объекта без фото — тонкие графитовые линии, моно-подписи, один оранжевый акцент */
+.case-plan{margin:18px 0 0}
+.case-plan svg{display:block;width:100%;max-width:380px;height:auto;overflow:visible}
+.case-plan line,.case-plan rect,.case-plan path{vector-effect:non-scaling-stroke}
+.case-plan__outline{stroke:var(--ink);stroke-width:1.5}
+.case-plan__dim line{stroke:#7b868d;stroke-width:1}
+.case-plan text{font-family:var(--f-m);font-size:12px;letter-spacing:.02em;fill:#3a454d}
+.case-plan__mark path{fill:var(--accent);stroke:none}
+.case-plan__mark line{stroke:var(--accent);stroke-width:1}
+.case-plan__mark text{font-size:13px;fill:var(--accent-deep)}
+.case-plan__mark .case-plan__note{font-size:10px;fill:var(--muted)}
+.case-plan figcaption{font-size:11px;line-height:1.4;color:var(--muted);margin-top:10px}
+.case-docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0 0;padding:18px 0 0;border-top:1px solid var(--line);list-style:none}
+.case-docs li{display:flex;flex-direction:column;min-width:0}
+.case-docs__num{font:500 clamp(28px,2.6vw,38px)/1 var(--f-d);letter-spacing:-.04em;color:var(--ink)}
+.case-docs__unit{font-size:11px;color:var(--muted);margin-top:8px}
+.case-docs__label{font-size:13px;line-height:1.35;color:var(--ink-2);margin-top:2px}
+.pro-case .case-docs{margin-top:4px;padding-top:0;border-top:0}
+.obj-card__media--plan{aspect-ratio:auto;display:flex;flex-direction:column;justify-content:center;padding:28px 28px 24px}
+.obj-card__media--plan .case-plan{margin:0}
+@media(max-width:640px){.obj-card__media--plan{padding:22px 18px 20px}.case-docs{gap:10px}.case-docs__num{font-size:28px}.case-docs__label{font-size:12px}}
+
+/* П. 20: Instagram — нейтральная обводка вместо зелёной WhatsApp */
+.btn--outline{--btn-bg:transparent;--btn-fg:var(--ink);--btn-line:var(--line-2)}
+.btn--outline:hover{--btn-bg:var(--paper-2)}
+
+/* Объект завода на видео (13.09): слева текст и главы, справа вертикальный ролик в рамке телефона */
+.object-video__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,380px);grid-template-areas:"head player" "chapters player";column-gap:64px;row-gap:32px;align-items:start}
+.object-video__head{grid-area:head}
+.object-video__head .lead{max-width:52ch;margin-top:18px}
+.object-video__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;margin:32px 0 0;padding:24px 0 0;border-top:1px solid var(--line)}
+.object-video__facts div{display:grid;gap:4px}
+.object-video__facts dt{font:600 clamp(22px,2vw,28px)/1.1 var(--f-d);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.object-video__facts dd{margin:0;font-size:13px;color:var(--muted)}
+.object-video__player{grid-area:player;margin:0;justify-self:end;width:100%;max-width:380px}
+.object-video__screen{position:relative;aspect-ratio:9/16;overflow:hidden;background:#0f171d;border:10px solid #1b262e;box-shadow:inset 0 0 0 1px #2b3842}
+.object-video__video{display:block;width:100%;height:100%;object-fit:cover;background:#0f171d}
+.object-video__play{position:absolute;inset:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:0;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(0deg,rgba(9,18,25,.62),rgba(9,18,25,.06) 55%)}
+.object-video__play-icon{position:relative;width:72px;height:72px;border-radius:50%;background:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.3);transition:transform .2s}
+.object-video__play-icon::after{content:"";position:absolute;left:29px;top:22px;border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent}
+.object-video__play:hover .object-video__play-icon{transform:scale(1.06)}
+.object-video__play-text{display:grid;gap:4px;font-weight:600;font-size:15px;text-align:center}
+.object-video__play-text small{font:11px var(--f-m);letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.object-video__player.is-playing .object-video__play{display:none}
+.object-video__cap{margin-top:12px;font:11px var(--f-m);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.object-video__chapters-wrap{grid-area:chapters}
+.object-video__chapters-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.object-video__chapters{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.object-video__chapter{display:grid;grid-template-columns:48px minmax(0,1fr) 20px;align-items:center;gap:14px;width:100%;min-height:48px;padding:10px 0;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer}
+.object-video__chapter .mono{font-size:13px;color:var(--accent-deep)}
+.object-video__chapter svg{width:16px;height:16px;opacity:.5;transition:transform .2s,opacity .2s}
+.object-video__chapter:hover svg,.object-video__chapter.is-active svg{opacity:1;transform:translateX(3px)}
+.object-video__chapter.is-active span:nth-child(2){font-weight:600}
+.object-video__chapter:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.object-video__chapters-wrap .arrow-link{margin-top:24px}
+@media(max-width:1100px){.object-video__grid{column-gap:40px;grid-template-columns:minmax(0,1fr) minmax(260px,320px)}}
+@media(max-width:900px){.object-video__grid{grid-template-columns:1fr;grid-template-areas:"head" "player" "chapters";row-gap:28px}.object-video__player{justify-self:start;max-width:340px}.object-video__facts{gap:16px 20px}}
+@media(prefers-reduced-motion:reduce){.object-video__play-icon,.object-video__chapter svg{transition:none}}

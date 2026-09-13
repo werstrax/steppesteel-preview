@@ -23,9 +23,9 @@
 .document-preview__meta{font-size:12px;color:#65727d;margin:0 0 16px}
 .document-preview h3{font-size:23px;font-weight:500;line-height:1.25;margin:0 0 14px}
 .document-preview__body>p:not(.document-preview__meta){font-size:14px;color:#647078;line-height:1.65;margin-bottom:24px}
-.document-preview__links{display:flex;align-items:center;gap:15px;justify-content:space-between;margin-top:auto;border-top:1px solid #e1e5e7;padding-top:18px}
-.document-preview__links a{display:flex;align-items:center;gap:14px;font-size:14px;min-height:40px}
-.document-preview__links a:last-child{width:42px;justify-content:center;border:1px solid #d8dfe4}
+.document-preview__links{display:flex;align-items:center;gap:20px;justify-content:space-between;margin-top:auto;border-top:1px solid #e1e5e7;padding-top:18px}
+.document-preview__links a{display:flex;align-items:center;gap:14px;font-size:14px;min-height:44px}
+.document-preview__links a:last-child{width:44px;min-width:44px;justify-content:center;border:1px solid #d8dfe4}
 .engineering-experience{background:#fff}
 
 .engineering-experience__note{font-size:12px;color:#737c84;line-height:1.6;margin-top:14px;max-width:95ch}
@@ -118,6 +118,7 @@
 .case-plan__mark line{stroke:var(--accent);stroke-width:1}
 .case-plan__mark text{font-size:13px;fill:var(--accent-deep)}
 .case-plan__mark .case-plan__note{font-size:10px;fill:var(--muted)}
+.case-plan__ridge{stroke-dasharray:7 5;opacity:.8}
 .case-plan figcaption{font-size:11px;line-height:1.4;color:var(--muted);margin-top:10px}
 .case-docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0 0;padding:18px 0 0;border-top:1px solid var(--line);list-style:none}
 .case-docs li{display:flex;flex-direction:column;min-width:0}

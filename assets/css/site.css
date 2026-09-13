@@ -739,6 +739,13 @@ a.card:hover { border-color: var(--line-2); color: inherit; }
 
 /* Объекты, документы, контакты */
 .obj-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-m); }
+/* Пока объект один — карточка во всю ширину, внутри две колонки: план слева,
+   параметры справа. Двухколоночная сетка вернётся со вторым объектом. */
+.obj-grid--single { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 861px) {
+  .obj-grid--single .obj-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .obj-grid--single .obj-card__media { border-right: 1px solid var(--line); }
+}
 .obj-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--paper); overflow: hidden; }
 .obj-card__media { position: relative; aspect-ratio: 3 / 2; background: var(--paper-2); }
 .obj-card__media picture, .obj-card__media img { width: 100%; height: 100%; object-fit: cover; }
@@ -1018,8 +1025,13 @@ select.field__input { appearance: none; background-image: linear-gradient(45deg,
   .flow-row::before { display: none; }
   .norm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .page-hero--photo .page-hero__grid { grid-template-columns: minmax(0, 1fr); }
-  .page-hero--photo .page-hero__body { padding: var(--space-xl) 0; }
-  .page-hero--photo .page-hero__media { min-height: 240px; order: -1; }
+  /* На телефоне кнопки поднимаем выше моно-строки оффера: иначе первая
+     кнопка уходит под липкую панель действий. */
+  .page-hero--photo .page-hero__body { padding: var(--space-l) 0 var(--space-xl); display: flex; flex-direction: column; }
+  .page-hero--photo .page-hero__offer { order: 1; }
+  /* Кнопки первого экрана не должны уезжать под фото (ТЗ §18): на узких
+     ширинах сначала заголовок, лид и кнопки, фото — под ними. */
+  .page-hero--photo .page-hero__media { min-height: 240px; }
   .side { position: static; }
   .article-layout { grid-template-columns: minmax(0, 1fr); }
   .toc { position: static; }

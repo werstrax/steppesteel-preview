@@ -621,9 +621,10 @@
       }).observe(footer);
     }
     function update() {
-      // ТЗ §18/§20: кнопки связи под рукой с первого экрана, а не после прокрутки.
-      var pastHero = window.scrollY > window.innerHeight * 0.12;
-      bar.classList.toggle('is-visible', pastHero && !nearFooter);
+      // ТЗ §18/§20: кнопки связи под рукой с первого экрана, а не после прокрутки,
+      // поэтому порога прокрутки нет — панель скрывается только у подвала,
+      // где те же действия уже стоят в тексте страницы.
+      bar.classList.toggle('is-visible', !nearFooter);
     }
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);

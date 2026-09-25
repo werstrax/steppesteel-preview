@@ -85,9 +85,11 @@
     });
   })();
 
-  /* --- Появление блоков при скролле ---------------------------------------- */
+  /* --- Посадка полноширинных фото: 1,03 → 1 при появлении ------------------
+     Одно из трёх движений сайта (дизайн-проход 13.09). data-reveal больше
+     ничего не делает — секции видны сразу и целиком. */
   (function reveal() {
-    var els = $$('[data-reveal]').concat($$('.hero-frame'));
+    var els = $$('[data-photo-reveal]');
     if (!els.length) return;
     if (reduced || !('IntersectionObserver' in window)) {
       els.forEach(function (el) { el.classList.add('is-in'); });
@@ -100,7 +102,37 @@
           io.unobserve(en.target);
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px', threshold: 0.3 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* --- Счётчик цоколя цифр: целые отсчитываются 0,9 с при появлении на 60 % ---
+     В HTML уже стоит итоговое значение — без JS и при reduced-motion числа
+     статичны. data-suffix («+») дописывается к каждому кадру, чтобы ширина
+     не прыгала. */
+  (function counters() {
+    var els = $$('[data-count]');
+    if (!els.length) return;
+    if (reduced || !('IntersectionObserver' in window)) return;
+    function run(el) {
+      var to = parseInt(el.getAttribute('data-count'), 10);
+      if (isNaN(to)) return;
+      var suf = el.getAttribute('data-suffix') || '';
+      var fin = el.textContent;
+      var t0 = performance.now();
+      var D = 900;
+      (function f(t) {
+        var p = Math.min(1, (t - t0) / D);
+        var k = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(to * k) + suf;
+        if (p < 1) requestAnimationFrame(f); else el.textContent = fin;
+      })(t0);
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { io.unobserve(en.target); run(en.target); }
+      });
+    }, { threshold: 0.6 });
     els.forEach(function (el) { io.observe(el); });
   })();
 
@@ -263,6 +295,14 @@
     function update() {
       var perM = parseFloat(crop.value) || 67;
       var t = Math.max(0, parseFloat(tons.value) || 0);
+      // Шкала вместимости (п.11): подсветить выбранную культуру и пересчитать «≈ N м».
+      // Стоит ДО раннего return — иначе при пустом поле подсветка не сбросится.
+      $$('[data-crop]').forEach(function (li) {
+        var k = parseFloat(li.getAttribute('data-crop'));
+        li.classList.toggle('is-active', String(k) === String(parseFloat(crop.value)));
+        var o = $('[data-cap-len]', li);
+        if (o && k > 0 && t > 0) o.textContent = '≈ ' + Math.ceil(t / k) + ' м';
+      });
       if (!t) { out.textContent = '—'; return; }
       var len = Math.ceil(t / perM);
       var capped = Math.min(len, 140);
@@ -665,7 +705,9 @@
   /* --- Видео с объекта: кнопка «Смотреть», главы с перемоткой, нарезка в зоне видимости --- */
   (function objectVideo() {
     $$('[data-video-player]').forEach(function (box) {
-      var v = box.querySelector('video');
+      // Основной ролик — по классу, не «первый <video>»: рядом в фигуре может
+      // стоять беззвучная нарезка (.object-video__loop), ею управлять нельзя.
+      var v = box.querySelector('.object-video__video') || box.querySelector('video');
       var btn = box.querySelector('[data-video-play]');
       if (!v) return;
       var scope = box.closest('section') || box.parentNode;

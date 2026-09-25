@@ -148,6 +148,10 @@
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --ease-in-out: cubic-bezier(.76, 0, .24, 1);
   --ease: var(--ease-out);
+
+  /* Дизайн-проход 13.09: шов между графитовыми полями и плотная секция */
+  --seam: #ffffff1f;
+  --sec-tight: clamp(36px, 4vw, 56px);
 }
 
 /* Тёмная секция — переопределение семантики, компоненты перекрашиваются сами */
@@ -260,7 +264,7 @@ h4, .h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 .container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
 .container--narrow { max-width: 860px; }
 .section { padding-block: var(--sec); }
-.section--tight { padding-block: var(--space-xl-2xl); }
+.section--tight { padding-block: var(--sec-tight); } /* служебные списки плотнее: 36–56 px вместо 92 */
 .section--flush-top { padding-top: var(--space-l-xl); }
 .section--tint, .section--sheet, .section--steel-2 { background: var(--paper-2); }
 .section--dark { background: var(--paper); color: var(--ink); }
@@ -281,7 +285,7 @@ h4, .h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 .card-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .card-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-.section-head { margin-bottom: var(--space-xl); }
+.section-head { margin-bottom: var(--space-l); } /* заголовок ближе к своему содержимому, чем к предыдущей секции */
 .section-head--split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-l) var(--space-xl); align-items: end; }
 .section-head__title { margin-bottom: 0; max-width: 20ch; }
 .section-head .lead { margin: 0; max-width: 52ch; }
@@ -405,6 +409,8 @@ h4, .h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 .footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-s); margin-top: var(--space-2xl); padding-top: var(--space-m); border-top: 1px solid var(--line); font-size: 0.8rem; }
 .footer__bottom a { color: var(--muted); }
 .footer__at { color: var(--muted); }
+/* Строка маршрута под картой: трасса и ж/д станция (site.contacts.address.note) */
+.footer__route { margin: var(--space-xs) 0 0; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-400); }
 .footer__wordmark { display: block; margin-top: var(--space-2xl); font-family: var(--f-d); font-weight: 800; font-size: clamp(3rem, 12vw, 11rem); line-height: 0.85; letter-spacing: -0.04em; color: var(--paper-2); user-select: none; }
 @media (max-width: 1020px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .footer__grid { grid-template-columns: 1fr; gap: var(--space-l); } }
@@ -526,10 +532,70 @@ h4, .h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 .page-hero--photo .page-hero__media { position: relative; min-height: 380px; overflow: hidden; }
 .page-hero--photo .page-hero__media picture, .page-hero--photo .page-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .page-hero--photo .page-hero__media::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); z-index: 1; }
+/* Фото до правого края окна (pageHero variant:'photo' → page-hero--bleed, дизайн-проход
+   13.09 п.5): сетка с именованными линиями вместо 100vw (скроллбар Windows), лёгкий
+   градиент по нижней кромке, моно-подпись 11 px капсом в углу. Оранжевая 4 px кромка
+   ::before остаётся — это та же засечка. Мобильные правила — в §18 (после :1027). */
+.page-hero--bleed > .container { width: auto; max-width: none; margin: 0; }
+.page-hero--bleed .page-hero__grid { grid-template-columns: [full-start] minmax(var(--gutter), 1fr) [content-start] minmax(0, calc(var(--container) / 2)) [mid] minmax(0, calc(var(--container) / 2)) [content-end] minmax(var(--gutter), 1fr) [full-end]; }
+.page-hero--bleed .page-hero__body { grid-column: content-start / mid; padding-right: var(--space-xl); }
+.page-hero--bleed .page-hero__media { grid-column: mid / full-end; min-height: clamp(420px, 42vw, 600px); }
+.page-hero--bleed .page-hero__media::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(0deg, oklch(16% 0.008 60 / 0.7), transparent); pointer-events: none; }
+.page-hero--bleed .page-hero__media .solution-image-note { background: none; padding: 0; left: 16px; bottom: 14px; font: 400 11px/1.4 var(--f-m); letter-spacing: 0.08em; text-transform: uppercase; text-shadow: 0 1px 8px oklch(16% 0.008 60 / 0.8); z-index: 2; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: var(--space-l); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .crumbs a:hover { color: var(--accent-deep); }
 .crumbs__sep { color: var(--line-2); }
 .crumbs [aria-current] { color: var(--ink); }
+
+/* 09b Система дизайн-прохода 13.09 («индустриальный отчёт о заводе») ----------- */
+
+/* Сквозной мотив — оранжевая засечка. Один код на все места, менять здесь:
+   над цифрой цоколя (28×3), на цепочке сроков и перед моно-подписью кадра (3×14). */
+.tick::before { content: ""; display: block; width: 28px; height: 3px; background: var(--accent); flex: none; }
+.tick--v::before { width: 3px; height: 14px; }
+.tick.mono { display: inline-flex; align-items: center; gap: 8px; } /* подписи кадров: засечка перед текстом */
+
+/* Плоская марка: оранжевый прямоугольник, графитовый моно-текст 10 px
+   (белый на оранжевом — 2,6:1, недопустимо). Одна на полку документов и форму. */
+.mark { display: inline-block; font: 500 10px/1 var(--f-m); letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-accent); background: var(--accent); padding: 6px 8px; border-radius: 0; white-space: nowrap; }
+
+/* Цоколь цифр (plinth): графит без зазора под первым экраном, цифры 2,5× крупнее h2.
+   Секция несёт section--dark — eyebrow, ссылки и текст перекрашены токенами. */
+.plinth { padding: clamp(40px, 5vw, 72px) 0 clamp(44px, 5.5vw, 80px); }
+.plinth__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.plinth__item { padding: 0 32px; border-left: 1px solid var(--seam); }
+.plinth__item:first-child { padding-left: 0; border-left: 0; }
+.plinth__item.tick::before { margin-bottom: 26px; }
+.plinth__val { display: flex; align-items: baseline; gap: 0.12em; font: 500 clamp(56px, 8.4vw, 120px)/0.9 var(--f-d); letter-spacing: -0.06em; color: var(--gray-0); font-variant-numeric: tabular-nums; margin: 0 0 22px; }
+.plinth__val small { font: 500 12px/1 var(--f-m); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); align-self: flex-end; margin-bottom: 0.45em; }
+.plinth__val [data-count] { display: inline-block; min-width: var(--ch, 2ch); text-align: right; } /* ширина под итог — CLS 0 при отсчёте */
+.plinth__title { font: 500 16px/1.4 var(--f-d); color: var(--gray-0); margin: 0 0 6px; }
+.plinth__text { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
+.plinth--sm { padding: 28px 0 32px; }
+.plinth--sm .plinth__grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.plinth--sm .plinth__val { font-size: clamp(40px, 4.6vw, 64px); margin-bottom: 10px; }
+.plinth--sm .plinth__item.tick::before { margin-bottom: 16px; }
+.plinth--sm .plinth__title { font-size: 14px; font-weight: 400; color: var(--gray-300); }
+@media (max-width: 900px) {
+  .plinth__grid, .plinth--sm .plinth__grid { grid-template-columns: 1fr 1fr; gap: 28px 0; } /* 2×2 и у --sm: auto-fit дал бы одну колонку */
+  .plinth__item { padding: 0 0 0 16px; }
+  .plinth__item:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .plinth__val { font-size: clamp(48px, 14vw, 64px); }
+}
+@media (max-width: 400px) { .plinth__val { font-size: 44px; } }
+
+/* Схема типового решения (typicalScheme, порт theme-tz.css:178–186): линии с данными,
+   миллиметровка .ts-grid выключена. Кегль 12,5 px в viewBox 300 при ширине 260 px
+   ≈ 11 px на экране; 10 px давали 8 px — нечитаемо. */
+.ts { width: 100%; height: auto; display: block; }
+.ts-grid { display: none; }
+.ts-ground { stroke: var(--gray-300); stroke-width: 1.2; }
+.ts-main { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+.ts-web line { stroke: var(--gray-300); stroke-width: 1; }
+.ts-fill { fill: var(--orange-100); stroke: none; }
+.ts-dim line { stroke: var(--accent); stroke-width: 1.1; }
+.ts-dim text { font: 12.5px var(--f-m); fill: var(--orange-700); letter-spacing: 0.06em; }
+.ts-note { font: 12.5px var(--f-m); fill: var(--muted); letter-spacing: 0.08em; }
 
 /* 10 Медиа ------------------------------------------------------------------ */
 
@@ -578,8 +644,7 @@ img[data-fade].is-loaded, html:not(.js) img[data-fade] { opacity: 1; }
 }
 a.card:hover { border-color: var(--line-2); color: inherit; }
 .card__media { position: relative; display: block; aspect-ratio: 3 / 2; background: var(--paper-2); overflow: hidden; }
-.card__media picture, .card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-3) var(--ease-out); }
-@media (hover: hover) { a.card:hover .card__media img { transform: scale(1.03); } }
+.card__media picture, .card__media img { width: 100%; height: 100%; object-fit: cover; }
 .card__media .photo-slot { position: absolute; inset: 0; aspect-ratio: auto; border: 0; border-radius: 0; }
 .card__body { display: flex; flex-direction: column; gap: 0.5rem; padding: var(--space-m); flex: 1 1 auto; }
 .card__title { font-size: var(--step-1); margin: 0; }
@@ -599,9 +664,8 @@ a.card:hover { border-color: var(--line-2); color: inherit; }
 }
 .tile--flag { grid-column: span 2; grid-row: span 2; }
 .tile__img { position: absolute; inset: 0; z-index: -2; }
-.tile__img picture, .tile__img img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-3) var(--ease-out); }
+.tile__img picture, .tile__img img { width: 100%; height: 100%; object-fit: cover; }
 .tile--photo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, oklch(16% 0.008 60 / 0.92) 0%, oklch(16% 0.008 60 / 0.35) 55%, oklch(16% 0.008 60 / 0.1) 100%); }
-@media (hover: hover) { .tile:hover .tile__img img { transform: scale(1.04); } }
 .tile__num { position: absolute; top: var(--space-s); left: var(--space-m); font-family: var(--f-m); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--gray-400); }
 .tile__flag { position: absolute; top: var(--space-s); right: var(--space-m); font-family: var(--f-m); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
 .tile__title { font-family: var(--f-d); font-weight: 700; font-size: var(--step-1); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 0.35rem; color: var(--gray-0); hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere; }
@@ -987,18 +1051,14 @@ select.field__input { appearance: none; background-image: linear-gradient(45deg,
 .next-project__title { font-family: var(--f-d); font-weight: 700; font-size: var(--step-3); margin: 0; }
 
 /* 16 Анимации ---------------------------------------------------------------- */
+/* Ровно три движения (дизайн-проход 13.09): строки H1 из маски (pro.css),
+   счётчик цоколя (site.js) и посадка полноширинных фото 1,03 → 1 при появлении.
+   data-reveal больше ничего не делает — секции видны сразу и целиком;
+   единственный анимируемый атрибут — data-photo-reveal на <figure> с <img>. */
 
 @media (prefers-reduced-motion: no-preference) {
-  html.js [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out); }
-  html.js [data-reveal].is-in { opacity: 1; transform: none; }
-  html.js .hero__text > [data-reveal]:nth-child(2) { transition-delay: 60ms; }
-  html.js .hero__text > [data-reveal]:nth-child(3) { transition-delay: 120ms; }
-  html.js .hero__text > [data-reveal]:nth-child(4) { transition-delay: 180ms; }
-  html.js .hero__text > [data-reveal]:nth-child(5) { transition-delay: 240ms; }
-  html.js .tiles [data-reveal]:nth-child(2), html.js .card-grid [data-reveal]:nth-child(2), html.js .mosaic [data-reveal]:nth-child(2) { transition-delay: 60ms; }
-  html.js .tiles [data-reveal]:nth-child(3), html.js .card-grid [data-reveal]:nth-child(3), html.js .mosaic [data-reveal]:nth-child(3) { transition-delay: 120ms; }
-  html.js .tiles [data-reveal]:nth-child(4), html.js .card-grid [data-reveal]:nth-child(4), html.js .mosaic [data-reveal]:nth-child(4) { transition-delay: 180ms; }
-  html.js .tiles [data-reveal]:nth-child(5), html.js .mosaic [data-reveal]:nth-child(5) { transition-delay: 240ms; }
+  html.js [data-photo-reveal] img { transform: scale(1.03); transition: transform var(--dur-3) var(--ease-out), opacity var(--dur-3) var(--ease-out); }
+  html.js [data-photo-reveal].is-in img { transform: none; }
 }
 
 /* 17 Утилиты --------------------------------------------------------------- */
@@ -1035,6 +1095,12 @@ select.field__input { appearance: none; background-image: linear-gradient(45deg,
   .side { position: static; }
   .article-layout { grid-template-columns: minmax(0, 1fr); }
   .toc { position: static; }
+  /* Фото до края (page-hero--bleed): текст и кнопки над фото (ТЗ §18), кадр 4:3
+     край в край. Стоит ПОСЛЕ .page-hero--photo .page-hero__grid выше — та же
+     специфичность, побеждает порядок; иначе именованные линии сетки терялись бы. */
+  .page-hero--bleed .page-hero__grid { grid-template-columns: [full-start] var(--gutter) [content-start] minmax(0, 1fr) [content-end] var(--gutter) [full-end]; }
+  .page-hero--bleed .page-hero__body { grid-column: content; padding-right: 0; }
+  .page-hero--bleed .page-hero__media { grid-column: full; min-height: 0; aspect-ratio: 4 / 3; }
 }
 @media (max-width: 860px) {
   .sol-row { grid-template-columns: 44px minmax(0, 1fr) 32px; }

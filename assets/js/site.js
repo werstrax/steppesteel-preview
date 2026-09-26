@@ -637,6 +637,41 @@
     update();
   })();
 
+  /* --- Лента карточек со стрелками (главная, «Что мы производим») ----------------- */
+  // Без JS лента просто прокручивается (scroll-snap), стрелки скрыты в CSS (html.js).
+  (function rails() {
+    $$('[data-rail]').forEach(function (root) {
+      var track = $('[data-rail-track]', root);
+      var prev = $('[data-rail-prev]', root);
+      var next = $('[data-rail-next]', root);
+      if (!track || !prev || !next) return;
+      // Шаг — целое число видимых карточек (минимум одна)
+      var step = function () {
+        var item = track.firstElementChild;
+        var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        var w = item ? item.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+        return Math.max(w, Math.floor((track.clientWidth + gap) / w) * w);
+      };
+      var update = function () {
+        var max = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max;
+      };
+      var go = function (dir) {
+        track.scrollBy({ left: dir * step(), behavior: reduced ? 'auto' : 'smooth' });
+      };
+      prev.addEventListener('click', function () { go(-1); });
+      next.addEventListener('click', function () { go(1); });
+      var frame = 0;
+      track.addEventListener('scroll', function () {
+        if (frame) return;
+        frame = requestAnimationFrame(function () { frame = 0; update(); });
+      }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    });
+  })();
+
   /* --- Клики по телефону, WhatsApp и PDF (ТЗ §24) --------------------------------- */
   (function goals() {
     document.addEventListener('click', function (e) {

@@ -135,3 +135,11 @@
 .prod-card--text{justify-content:flex-end;background:var(--paper-2);min-height:220px}
 .prod-card--text .prod-card__body{padding-top:var(--space-l)}
 .prod-card--text .prod-card__num{font-size:2.4rem;line-height:1;letter-spacing:-.04em}
+
+/* 27.09: четыре документа на полке (добавлена презентация зернохранилища) */
+.document-shelf__grid--n4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.document-shelf__grid--n4 .document-preview h3{font-size:20px}
+@media(max-width:1180px){.document-shelf__grid--n4{grid-template-columns:1fr 1fr}.document-shelf__grid--n4 .document-preview:last-child{grid-column:auto;display:flex}.document-shelf__grid--n4 .document-preview:last-child .document-preview__image{height:auto;aspect-ratio:16/9;min-height:0}.document-shelf__grid--n4 .document-preview--certificate .document-preview__image{aspect-ratio:1.5}}
+@media(max-width:640px){.document-shelf__grid--n4{grid-template-columns:1fr}}
+.side__doc{margin-top:14px}
+.hero-doc{align-self:center;font-size:14px}

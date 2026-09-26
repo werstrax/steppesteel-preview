@@ -236,3 +236,225 @@
 
 /* Подвал: аудитории отдельным коротким списком под навигацией */
 .footer__list--aud{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+
+/* ==========================================================================
+   26.09 — главная по макету Шамиля (home.mjs, префикс hm-): 10 блоков сверху вниз.
+   Белый фон, графит, металл, один оранжевый акцент (ТЗ §3). Новых анимаций нет —
+   только смена цвета рамки на hover. Иконки — src/lib/icons.mjs (штрих 1.5).
+   ========================================================================== */
+.hm-sec{padding-block:clamp(32px,3.4vw,48px)}
+.hm-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px 32px;margin-bottom:clamp(18px,2vw,26px)}
+.hm-h2{margin:0;max-width:none;font:600 clamp(24px,2.2vw,32px)/1.2 var(--f-d);letter-spacing:-.025em;color:var(--ink)}
+.hm-head__side{display:flex;align-items:center;gap:24px;margin-left:auto}
+.hm-head__link{font-size:14px;min-height:44px;display:inline-flex;align-items:center;gap:12px}
+.hm-btn-sm{min-height:44px;padding:10px 18px;font-size:14px;font-weight:500;gap:14px;align-self:flex-start}
+.btn--ghost.hm-btn-sm{--btn-line:var(--ink)}
+.hm-note{margin:18px 0 0;padding-left:12px;border-left:3px solid var(--accent);font-size:12px;line-height:1.5;color:var(--muted)}
+.line-icon{display:block;width:100%;height:100%}
+
+/* 2. Первый экран: светлый фон, текст слева, кадр каркаса справа до края окна.
+   Колонка текста — 46 % контейнера; ширина кадра = 50 % + 4 % контейнера. */
+.hm-hero{--hm-copy:.46}
+.hm-hero__main{position:relative;background:var(--gray-50);overflow:hidden}
+.hm-hero__copy{position:relative;z-index:1;width:calc(var(--hm-copy) * 100%);min-height:clamp(500px,41vw,600px);display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,4vw,64px) clamp(24px,2.6vw,44px) clamp(40px,4vw,64px) 0}
+.hm-hero__media{position:absolute;top:0;right:0;bottom:0;margin:0;width:calc(50% + (.5 - var(--hm-copy)) * min(100% - 2 * var(--gutter), var(--container)));background:var(--gray-200)}
+.hm-hero__media picture,.hm-hero__media img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.hm-hero__eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 22px;font:500 11px/1.4 var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:var(--gray-600)}
+.hm-hero__eyebrow>span{width:7px;height:7px;flex:none;background:var(--accent)}
+.hm-hero__title{margin:0 0 20px;max-width:none;font:600 clamp(32px,3.6vw,52px)/1.06 var(--f-d);letter-spacing:-.035em;color:var(--ink);hyphens:manual;-webkit-hyphens:manual}
+.hm-hero__brand{display:block}
+.hm-hero__sub{margin:0 0 8px;font:500 clamp(17px,1.4vw,20px)/1.4 var(--f-d);letter-spacing:-.01em;color:var(--ink)}
+.hm-hero__sub i{font-style:normal;color:var(--accent)}
+.hm-hero__lead{margin:0 0 28px;max-width:36em;font-size:16px;line-height:1.6;color:var(--gray-600)}
+.hm-hero__actions{display:flex;flex-wrap:wrap;gap:12px}
+.hm-hero__actions .btn{min-height:50px;padding:14px 22px;gap:18px}
+.hm-hero__actions .btn--ghost{--btn-line:var(--ink)}
+.hm-hero__actions .btn--ghost:hover{--btn-bg:#fff}
+.hm-hero__promise{margin:18px 0 0;max-width:52ch;font-size:13px;line-height:1.55;color:var(--gray-600)}
+.hm-hero__promise a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:.22em}
+.hm-hero__promise a:hover{color:var(--accent-deep);text-decoration-color:currentColor}
+/* Фирменная полоса под первым экраном: проектный отдел · производство · сертификат.
+   Без вертикальных разделителей: у полосы 3 колонки, у показателей ниже — 4, линии не совпали бы. */
+.hm-strip{background:#fff;border-bottom:1px solid var(--line)}
+.hm-strip__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.hm-strip a{display:flex;align-items:center;gap:16px;min-height:60px;padding:14px 20px;font-size:14px;color:var(--ink)}
+.hm-strip a:first-child{padding-left:0}
+.hm-strip a:hover{color:var(--accent-deep)}
+.hm-strip .mono{font-size:11px;color:var(--gray-600)}
+.hm-strip .arrow{margin-left:auto;flex:none}
+
+/* 3. Наши показатели: 4 пункта в ряд, линейная иконка + значение + подпись */
+.hm-kpi{border-bottom:1px solid var(--line)}
+.hm-kpi__list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:0;list-style:none}
+/* Значения всех четырёх пунктов — на одной линии, даже если подпись в одну строку: выравнивание по верху */
+.hm-kpi__item{display:flex;align-items:flex-start;gap:16px;min-width:0;padding:26px 24px;border-left:1px solid var(--line)}
+.hm-kpi__item:first-child{padding-left:0;border-left:0}
+.hm-kpi__icon{flex:none;width:44px;height:44px;margin-top:2px;color:var(--ink)}
+.hm-kpi__body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.hm-kpi__value{font:600 clamp(19px,1.6vw,22px)/1.2 var(--f-d);letter-spacing:-.02em;color:var(--ink)}
+.hm-kpi__value small{font-size:.8em;font-weight:500;letter-spacing:-.01em}
+.hm-kpi__title{font-size:13px;line-height:1.45;color:var(--gray-600)}
+
+/* 4. Что мы производим: лента со снэпом. Без JS — обычная прокрутка, стрелки скрыты */
+.hm-rail__nav{display:none;gap:8px}
+html.js .hm-rail__nav{display:flex}
+.hm-rail__btn{display:inline-grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid var(--line-2);border-radius:var(--r-1);background:#fff;color:var(--ink);cursor:pointer;transition:border-color var(--dur-1),opacity var(--dur-1)}
+.hm-rail__btn:hover:not(:disabled){border-color:var(--ink)}
+.hm-rail__btn:disabled{opacity:.35;cursor:default}
+.hm-rail__btn .line-icon{width:18px;height:18px}
+.hm-rail{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 4 * 16px) / 5);gap:16px;margin:0;padding:0 0 14px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.hm-rail:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.hm-rail__item{display:flex;min-width:0;scroll-snap-align:start}
+.hm-prod{display:flex;flex-direction:column;width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);transition:border-color var(--dur-1)}
+.hm-prod:hover{border-color:var(--gray-400);color:var(--ink)}
+.hm-prod__photo{display:block;aspect-ratio:3/2;overflow:hidden;background:var(--gray-100)}
+.hm-prod__photo picture,.hm-prod__photo img{display:block;width:100%;height:100%;object-fit:cover}
+.hm-prod__body{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}
+.hm-prod__title{margin:0 0 6px;font:600 16px/1.3 var(--f-d);letter-spacing:-.01em;overflow-wrap:normal;color:var(--ink)}
+.hm-prod__text{margin-bottom:14px;font-size:13px;line-height:1.5;color:var(--gray-600)}
+.hm-prod__more{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:12px;min-height:36px;padding:7px 12px;border:1px solid var(--line-2);font-size:13px;font-weight:500}
+.hm-prod:hover .hm-prod__more{border-color:var(--ink)}
+.hm-produce .solutions-photo-note{margin-top:14px}
+
+/* 5. Типовые решения: слева заголовок, текст и кнопка; справа 4 карточки с фото */
+.hm-typical__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3.4fr);gap:clamp(24px,3vw,44px);align-items:start}
+.hm-typical__intro{display:flex;flex-direction:column;gap:16px;padding-top:4px}
+.hm-typical__intro p{margin:0;max-width:52ch;font-size:14px;line-height:1.6;color:var(--gray-600)}
+.hm-typical__list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.hm-typical__list>li{display:flex;min-width:0}
+.hm-typ{display:flex;flex-direction:column;width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);transition:border-color var(--dur-1)}
+.hm-typ:hover{border-color:var(--gray-400);color:var(--ink)}
+.hm-typ__photo{display:block;aspect-ratio:3/2;overflow:hidden;background:var(--gray-100)}
+.hm-typ__photo picture,.hm-typ__photo img{display:block;width:100%;height:100%;object-fit:cover}
+.hm-typ__body{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}
+.hm-typ__title{margin:0 0 10px;font:600 15px/1.3 var(--f-d);letter-spacing:-.01em;overflow-wrap:normal;color:var(--ink)}
+.hm-typ__params{margin:0 0 12px;font-size:13px;line-height:1.5;color:var(--gray-600)}
+.hm-typ__params dt,.hm-typ__params dd{display:inline;margin:0}
+.hm-typ__params dd{color:var(--ink)}
+.hm-typ__more{margin-top:auto;display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--accent-deep)}
+
+/* 6. Реализованные объекты: фото, бейдж, название, место и год */
+.hm-objects__list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.hm-objects__list>li{display:flex;min-width:0}
+.hm-obj{display:flex;flex-direction:column;width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);transition:border-color var(--dur-1)}
+.hm-obj:hover{border-color:var(--gray-400);color:var(--ink)}
+.hm-obj__media{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--gray-100)}
+.hm-obj__media picture,.hm-obj__media img{display:block;width:100%;height:100%;object-fit:cover}
+.hm-obj__media--plan{display:flex;align-items:center;justify-content:center;padding:18px 22px;background:var(--gray-50)}
+.hm-obj__media--plan .case-plan{width:100%;margin:0}
+.hm-obj__media--plan .case-plan svg{max-width:340px;margin-inline:auto}
+.hm-obj__media--plan .case-plan figcaption{text-align:center}
+.hm-obj__body{display:flex;flex-direction:column;gap:4px;padding:14px 16px 16px}
+.hm-obj__badge{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep)}
+.hm-obj__title{margin:0;font:600 16px/1.3 var(--f-d);letter-spacing:-.01em;overflow-wrap:normal;color:var(--ink)}
+.hm-obj__meta{font-size:13px;color:var(--gray-600)}
+
+/* 7. Две большие карточки: проектировщикам и дилерам — чек-лист слева, кадр справа */
+.hm-partners__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+/* Колонка текста шире фото (как в макете): «Стать дилером STEPPESTEEL» помещается в одну строку от ≈1300 px,
+   и чек-листы обеих карточек начинаются на одной высоте */
+.hm-partner{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);min-height:260px;background:var(--gray-50);border:1px solid var(--line)}
+.hm-partner__body{display:flex;flex-direction:column;gap:18px;padding:clamp(20px,2.2vw,30px)}
+.hm-partner__title{margin:0;max-width:none;font:600 clamp(20px,1.6vw,23px)/1.25 var(--f-d);letter-spacing:-.02em;color:var(--ink)}
+.hm-partner .hm-btn-sm{margin-top:auto}
+.hm-partner__photo{position:relative;min-height:220px;margin:0;overflow:hidden;background:var(--gray-200)}
+.hm-partner__photo picture,.hm-partner__photo img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.hm-check{display:grid;gap:9px;margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45;color:var(--ink)}
+.hm-check li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;align-items:start}
+.hm-check .line-icon{width:18px;height:18px;margin-top:1px;color:var(--accent)}
+
+/* 8. Как мы работаем: 5 шагов в ряд, иконки в кружках, стрелки между шагами */
+.hm-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px;margin:0;padding:0;list-style:none}
+.hm-step{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:start;align-content:start;min-width:0}
+.hm-step__icon{display:grid;place-items:center;width:56px;height:56px;border:1.5px solid var(--gray-300);border-radius:50%;background:#fff;color:var(--ink)}
+.hm-step__icon .line-icon{width:28px;height:28px}
+.hm-step__title{margin:4px 0 6px;font:600 15px/1.3 var(--f-d);letter-spacing:-.01em;overflow-wrap:normal;color:var(--ink)}
+.hm-step__num{color:var(--accent-deep)}
+.hm-step__text{margin:0;font-size:13px;line-height:1.5;color:var(--gray-600)}
+.hm-step__term{margin:8px 0 0;font-size:11px;line-height:1.45;letter-spacing:.02em;color:var(--ink)}
+.hm-step__arrow{position:absolute;top:18px;right:-24px;width:20px;height:20px;color:var(--gray-400)}
+.hm-process__note{margin-top:28px}
+
+/* 9. О заводе: текст слева, 4 реальных кадра в ряд справа */
+.hm-about__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(24px,3.4vw,52px);align-items:center}
+.hm-about__copy{display:flex;flex-direction:column;gap:16px}
+.hm-about__text{margin:0;font-size:15px;line-height:1.65;color:var(--gray-600)}
+.hm-about__actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;margin-top:6px}
+.hm-about__actions .arrow-link{font-size:14px;display:inline-flex;align-items:center;gap:12px}
+.hm-about__photos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.hm-about__photo{display:flex;flex-direction:column;gap:8px;margin:0}
+.hm-about__photo picture{display:block;aspect-ratio:1;overflow:hidden;background:var(--gray-200)}
+.hm-about__photo img{display:block;width:100%;height:100%;object-fit:cover}
+.hm-about__photo figcaption{padding-left:10px;border-left:2px solid var(--accent);font-size:12px;line-height:1.4;color:var(--gray-600)}
+
+@media(max-width:1200px){
+.hm-hero{--hm-copy:.52}
+.hm-rail{grid-auto-columns:calc((100% - 3 * 16px) / 4)}
+.hm-typical__grid{grid-template-columns:1fr;gap:22px}
+.hm-steps{gap:22px}
+.hm-step{grid-template-columns:1fr}
+.hm-step__arrow{right:-21px;width:20px}
+}
+@media(min-width:1101px) and (max-width:1299px){
+/* Две карточки рядом, но заголовок дилеров может уйти во вторую строку — держим место под две строки у обеих */
+.hm-partner__title{min-height:2.5em}
+}
+@media(max-width:1100px){
+.hm-partners__grid{grid-template-columns:1fr}
+.hm-about__grid{grid-template-columns:1fr}
+.hm-kpi__item{gap:12px;padding-inline:16px}
+.hm-kpi__icon{width:38px;height:38px}
+}
+@media(max-width:980px){
+.hm-hero__copy{width:auto;min-height:0;padding:36px 0 32px}
+.hm-hero__media{position:relative;width:auto;aspect-ratio:16/9}
+.hm-hero__title{font-size:clamp(30px,6vw,46px)}
+.hm-steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:30px}
+.hm-step:nth-child(3) .hm-step__arrow{display:none}
+}
+@media(max-width:900px){
+.hm-kpi__list{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hm-kpi__item{padding:18px 16px}
+.hm-kpi__item:nth-child(odd){padding-left:0;border-left:0}
+.hm-kpi__item:nth-child(n+3){border-top:1px solid var(--line)}
+.hm-rail{grid-auto-columns:calc((100% - 2 * 16px) / 3)}
+.hm-typical__list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+.hm-strip a{gap:10px;padding:12px;font-size:13px}
+}
+@media(max-width:640px){
+.hm-hero__copy{padding:24px 0}
+.hm-hero__eyebrow{margin-bottom:14px;font-size:10px;letter-spacing:.08em}
+.hm-hero__title{margin-bottom:12px;font-size:clamp(28px,8.6vw,36px);line-height:1.08}
+.hm-hero__sub{font-size:16px}
+.hm-hero__lead{margin-bottom:18px;font-size:15px}
+.hm-hero__actions{flex-direction:column;align-items:stretch;gap:10px}
+.hm-hero__actions .btn{width:100%;justify-content:space-between;min-height:48px;padding:13px 18px}
+.hm-hero__promise{font-size:12px}
+.hm-hero__media{aspect-ratio:3/2}
+.hm-strip__grid{grid-template-columns:1fr}
+.hm-strip a,.hm-strip a:first-child{min-height:48px;padding:10px 0;border-left:0;border-top:1px solid var(--line)}
+.hm-strip a:first-child{border-top:0}
+.hm-kpi__item{flex-direction:column;align-items:flex-start;gap:10px;padding:16px 12px}
+.hm-kpi__icon{width:36px;height:36px}
+.hm-kpi__value{font-size:18px}
+.hm-kpi__title{font-size:12px}
+.hm-head__side{width:100%;margin-left:0;justify-content:space-between}
+/* Лента на телефоне — до краёв экрана: следующая карточка выглядывает из-за края, а не обрезается полем */
+.hm-rail{grid-auto-columns:78%;gap:12px;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+.hm-typical__list{grid-template-columns:1fr;gap:12px}
+.hm-typ{flex-direction:row}
+.hm-typ__photo{flex:0 0 38%;aspect-ratio:auto;min-height:124px}
+.hm-typ__body{padding:12px 14px 14px}
+.hm-objects__list{grid-template-columns:1fr}
+.hm-partner{grid-template-columns:1fr}
+.hm-partner__photo{order:-1;min-height:0;aspect-ratio:16/9}
+.hm-steps{grid-template-columns:1fr;gap:18px}
+.hm-step{grid-template-columns:48px minmax(0,1fr);gap:14px}
+.hm-step__icon{width:48px;height:48px}
+.hm-step__icon .line-icon{width:24px;height:24px}
+.hm-step__arrow{display:none}
+.hm-about__photos{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hm-about__actions{flex-direction:column;align-items:flex-start}
+}

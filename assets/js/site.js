@@ -117,20 +117,26 @@
   })();
 
   /* --- Таблицы: подсказка «листается» --------------------------------------- */
+  /* Плашка стоит строкой сразу ПОСЛЕ .table-wrap, а не внутри: поверх ячеек
+     она закрывала последние цифры столбца («37 т»). */
   (function tableHints() {
     $$('.table-wrap').forEach(function (wrap) {
       var check = function () {
         var scrollable = wrap.scrollWidth > wrap.clientWidth + 4;
         var atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 8;
-        var hint = $('.table-hint', wrap);
-        if (scrollable && !atEnd && !hint) {
+        var next = wrap.nextElementSibling;
+        var hint = next && next.classList.contains('table-hint') ? next : null;
+        if (scrollable && !hint && !atEnd) {
           hint = document.createElement('span');
           hint.className = 'table-hint';
           hint.textContent = 'листается →';
-          wrap.appendChild(hint);
-        } else if ((!scrollable || atEnd) && hint) {
-          hint.remove();
+          wrap.insertAdjacentElement('afterend', hint);
         }
+        if (!hint) return;
+        if (!scrollable) hint.remove();
+        // В конце прокрутки строка прячется, но место держит — текст под
+        // таблицей не прыгает, пока посетитель листает.
+        else hint.style.visibility = atEnd ? 'hidden' : '';
       };
       wrap.addEventListener('scroll', check, { passive: true });
       window.addEventListener('resize', check);
@@ -660,60 +666,5 @@
       var sec = document.getElementById(id);
       if (sec) io.observe(sec);
     });
-  })();
-
-  /* --- Видео с объекта: кнопка «Смотреть», главы с перемоткой, нарезка в зоне видимости --- */
-  (function objectVideo() {
-    $$('[data-video-player]').forEach(function (box) {
-      var v = box.querySelector('video');
-      var btn = box.querySelector('[data-video-play]');
-      if (!v) return;
-      var scope = box.closest('section') || box.parentNode;
-      var chapters = $$('[data-video-seek]', scope);
-      var started = false;
-
-      function play() {
-        var p = v.play();
-        if (p && p.catch) p.catch(function () {});
-        box.classList.add('is-playing');
-        if (!started) { started = true; goal('video_play'); }
-      }
-      function seek(t) {
-        if (v.readyState >= 1) { v.currentTime = t; play(); return; }
-        // preload="none": до первого запуска currentTime не применяется — стартуем через медиафрагмент #t=
-        var src = (v.currentSrc || (v.querySelector('source') || {}).src || v.getAttribute('src') || '').split('#')[0];
-        if (src) { v.src = src + '#t=' + t; v.load(); }
-        play();
-      }
-
-      // Штатные кнопки плеера — только после запуска: до него кадр закрывает кнопка «Смотреть»
-      v.removeAttribute('controls');
-      if (btn) btn.addEventListener('click', function () { play(); });
-      v.addEventListener('play', function () { box.classList.add('is-playing'); v.setAttribute('controls', ''); });
-
-      chapters.forEach(function (c) {
-        c.addEventListener('click', function () {
-          seek(parseFloat(c.getAttribute('data-video-seek')) || 0);
-          if (window.innerWidth < 900) box.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
-        });
-      });
-      v.addEventListener('timeupdate', function () {
-        var t = v.currentTime, active = null;
-        chapters.forEach(function (c) { if (t >= (parseFloat(c.getAttribute('data-video-seek')) || 0)) active = c; });
-        chapters.forEach(function (c) { c.classList.toggle('is-active', c === active); });
-      });
-    });
-
-    // Нарезка без звука: играет только пока видна, при reduced-motion остаётся постер
-    var loops = $$('[data-video-loop] video');
-    if (!loops.length || reduced || !('IntersectionObserver' in window)) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        var lv = en.target;
-        if (en.isIntersecting) { var p = lv.play(); if (p && p.catch) p.catch(function () {}); }
-        else lv.pause();
-      });
-    }, { threshold: 0.25 });
-    loops.forEach(function (lv) { io.observe(lv); });
   })();
 })();

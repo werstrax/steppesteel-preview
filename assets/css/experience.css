@@ -1,12 +1,7 @@
 
-/* Factory photography and original documentation. */
-.factory-hero__image img{object-position:70% center}
-.factory-hero:before{background:linear-gradient(90deg,rgba(9,18,25,.86) 0%,rgba(9,18,25,.72) 24%,rgba(9,18,25,.26) 54%,rgba(9,18,25,.03) 100%),linear-gradient(0deg,rgba(9,18,25,.65),transparent 35%)}
-.factory-hero__inner{min-height:650px}
-.factory-hero__location{min-width:190px;font-size:10px}
-.factory-hero__location small{font-size:12px}
-.factory-hero__documents{display:inline-flex;color:#dbe2e7;font-size:13px;gap:12px;align-items:center;margin-top:12px;min-height:44px}
-.factory-hero__documents:hover{color:#fff}
+/* Factory photography and original documentation.
+   26.09: правила первого экрана (.factory-hero*) собраны в pro.css — здесь их больше нет,
+   иначе этот файл (он подключается позже) перебивал мобильную раскладку. */
 
 .document-shelf{background:#f5f6f6}
 .document-shelf__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;align-items:stretch}
@@ -14,6 +9,12 @@
 .document-preview__image{position:relative;display:flex;justify-content:center;align-items:center;aspect-ratio:1.5;background:#e5e9eb;overflow:hidden;padding:0}
 .document-preview__image img{width:100%;height:100%;object-fit:cover;transition:transform 250ms}
 .document-preview__image:hover img{transform:scale(1.025)}
+/* 26.09 (H-06): обложка «Презентации завода» — фирменная типографская карточка вместо кадра из PDF.
+   Свои классы, не .logo*: карточка лежит внутри ссылки на PDF */
+.document-preview__brand{display:grid;place-content:center;justify-items:center;width:100%;height:100%;background:#10191f;color:#fff}
+.docbrand__steppe{font:700 12px/1 var(--f-d);letter-spacing:.52em;margin-right:-.52em}
+.docbrand__steel{font:800 clamp(34px,4vw,48px)/1 var(--f-d);letter-spacing:.02em;margin-top:6px;padding-bottom:6px;border-bottom:3px solid var(--accent)}
+.docbrand__title{font:400 12px var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:#a5adb3;margin-top:14px}
 .document-preview--certificate .document-preview__image{padding:22px}
 .document-preview--certificate .document-preview__image img{width:auto;max-width:85%;height:100%;object-fit:contain;box-shadow:0 6px 20px #16202b20}
 .document-preview__tag{position:absolute;left:12px;top:auto;bottom:12px;background:#fff;padding:6px 8px;font-size:10px;letter-spacing:.05em;color:#273540}
@@ -42,14 +43,12 @@
 .pro-about__identity>strong{font:800 clamp(44px,5.5vw,80px)/.91 var(--f-d);letter-spacing:-.045em}
 .pro-about__identity>strong i{color:#f47b36;font-style:normal}
 .pro-about__identity>p{font-size:15px;max-width:35ch;color:#b7c2ca}
-@media(max-width:980px){.document-shelf__grid{grid-template-columns:1fr 1fr}.document-preview:last-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.document-preview:last-child .document-preview__image{height:100%;aspect-ratio:auto;min-height:280px}.document-preview--certificate .document-preview__image img{max-height:260px}.factory-hero__inner{min-height:590px}.engineering-deliverables{gap:22px}}
-@media(max-width:640px){.factory-hero__inner{min-height:570px}.factory-hero__image img{object-position:58% center}.factory-hero:before{background:linear-gradient(90deg,rgba(9,18,25,.86),rgba(9,18,25,.50)),linear-gradient(0deg,rgba(9,18,25,.55),transparent)}.document-shelf__grid{grid-template-columns:1fr}.document-preview:last-child{display:flex;grid-column:auto}.document-preview:last-child .document-preview__image{height:230px;min-height:0}.document-preview h3{font-size:23px}.engineering-deliverables{grid-template-columns:1fr;gap:22px;margin-top:32px}.engineering-deliverables h3{font-size:22px}.doc-library__request{grid-template-columns:1fr;padding:24px;gap:20px}.pro-about__identity{padding:30px}.pro-about__identity>strong{font-size:64px}}
+@media(max-width:980px){.document-shelf__grid{grid-template-columns:1fr 1fr}.document-preview:last-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.document-preview:last-child .document-preview__image{height:100%;aspect-ratio:auto;min-height:280px}.document-preview--certificate .document-preview__image img{max-height:260px}.engineering-deliverables{gap:22px}}
+@media(max-width:640px){.document-shelf__grid{grid-template-columns:1fr}.document-preview:last-child{display:flex;grid-column:auto}.document-preview:last-child .document-preview__image{height:230px;min-height:0}.document-preview h3{font-size:23px}.engineering-deliverables{grid-template-columns:1fr;gap:22px;margin-top:32px}.engineering-deliverables h3{font-size:22px}.doc-library__request{grid-template-columns:1fr;padding:24px;gap:20px}.pro-about__identity{padding:30px}.pro-about__identity>strong{font-size:64px}}
 @media(prefers-reduced-motion:reduce){.document-preview__image img{transition:none}.document-preview__image:hover img{transform:none}}
 @media(max-width:1120px){.header .nav,.header .header__cta{display:none}.header .burger{display:inline-flex}.topbar__note{display:none}.topbar__inner{justify-content:flex-end}}
 
 /* Client supplied photography — use native resolution and responsive sources. */
-.factory-hero__image img{object-position:65% 50%}
-.factory-hero__location a{color:inherit}
 .pro-solutions{grid-template-columns:1.35fr 1fr 1fr}
 .pro-solution__photo img{object-position:center}
 .pro-solution__photo--frame{background:#dbe4ec}
@@ -63,12 +62,9 @@
 .construction-photos__frame img{width:100%;height:100%;object-fit:cover}
 .construction-photos figcaption{font-size:14px;line-height:1.5;color:#596b77;padding-top:17px}
 .construction-photos figcaption span{display:block;font-size:10px;letter-spacing:.08em;color:#8b551f;margin-bottom:7px}
-.pro-about__photo{margin:0}
-.pro-about__photo picture,.pro-about__photo img{width:100%;height:auto;aspect-ratio:1.775;object-fit:cover}
-.pro-about__photo figcaption{font-size:12px;color:#687780;padding-top:12px}
 @media(max-width:1100px){.pro-solutions{grid-template-columns:1fr 1fr}}
-@media(max-width:900px){.construction-photos{grid-template-columns:1fr;gap:28px}.construction-photos__frame{max-width:577px;width:100%;justify-self:end}.factory-hero__image img{object-position:62% 50%}}
-@media(max-width:640px){.pro-solutions{grid-template-columns:1fr}.factory-hero__image img{object-position:61% center}.construction-photos figcaption{font-size:13px}.construction-photos__frame{max-width:100%}.engineering-experience .section-head__title{max-width:18ch}}
+@media(max-width:900px){.construction-photos{grid-template-columns:1fr;gap:28px}.construction-photos__frame{max-width:577px;width:100%;justify-self:end}}
+@media(max-width:640px){.pro-solutions{grid-template-columns:1fr}.construction-photos figcaption{font-size:13px}.construction-photos__frame{max-width:100%}.engineering-experience .section-head__title{max-width:18ch}}
 
 /* Identify generated category images. */
 .solution-image-note{position:absolute;left:12px;bottom:12px;right:auto;max-width:calc(100% - 24px);z-index:2;background:#14232cdd;color:#fff;font:400 12px/1.4 var(--f-t);padding:6px 9px;letter-spacing:0;pointer-events:none}
@@ -82,14 +78,15 @@
 .pro-solutions--all .pro-solution p{font-size:13px}
 @media(max-width:1100px){.pro-solutions--all{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.pro-solutions--all .pro-solution:first-child{grid-column:auto}.pro-solutions--all .pro-solution:first-child .pro-solution__photo{aspect-ratio:3/2}}
 @media(max-width:640px){.pro-solutions--all{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px;padding-top:24px}.pro-solutions--all .pro-solution .pro-solution__photo,.pro-solutions--all .pro-solution:first-child .pro-solution__photo{aspect-ratio:4/3}.pro-solutions--all .pro-solution h3,.pro-solutions--all .pro-solution:first-child h3{font-size:16px}.pro-solutions--all .pro-solution p{display:none}.pro-solutions--all .pro-solution__body{padding:12px 0 14px;grid-template-columns:1fr 24px}.pro-solutions--all .pro-solution__index{font-size:9px;padding:4px 6px;top:8px;left:8px}}
-
-/* Первый экран: аэросъёмка комплекса зданий — здания в центре и справа, текст слева на небе/поле под затемнением */
-.factory-hero__image img{object-position:62% 58%}
-@media(max-width:640px){.factory-hero__image img{object-position:70% 60%}}
-
-/* Разбор 11.09, п. 2: обещание под кнопками первого экрана */
-.factory-hero__promise{margin:16px 0 0;max-width:46ch;font-size:13px;line-height:1.55;color:#d6dce0}
-@media(max-width:640px){.factory-hero__promise{font-size:12px;max-width:34ch;margin-top:14px}}
+/* 26.09 (H-02): мобильная сетка шести карточек — одно соотношение фото, заголовок целым словом
+   (перебивает общее h3{overflow-wrap:anywhere} из site.css), подпись кадра на каждой карточке */
+@media(max-width:640px){
+.pro-solutions--all .pro-solution:first-child .pro-solution__photo,.pro-solutions--all .pro-solution:not(:first-child) .pro-solution__photo{aspect-ratio:4/3}
+.pro-solutions--all .pro-solution__body{grid-template-columns:1fr}
+.pro-solutions--all .pro-solution__arrow{display:none}
+.pro-solutions--all .pro-solution h3{overflow-wrap:normal;word-break:normal;hyphens:manual}
+}
+@media(max-width:360px){.pro-solutions--all .pro-solution h3,.pro-solutions--all .pro-solution:first-child h3{font-size:15px}}
 
 /* П. 6: срок этапа моно-строкой над заголовком шага */
 .pro-process__term{display:block;font-size:11px;letter-spacing:.06em;line-height:1.4;color:var(--ink);margin:-6px 0 10px}
@@ -133,39 +130,6 @@
 /* П. 20: Instagram — нейтральная обводка вместо зелёной WhatsApp */
 .btn--outline{--btn-bg:transparent;--btn-fg:var(--ink);--btn-line:var(--line-2)}
 .btn--outline:hover{--btn-bg:var(--paper-2)}
-
-/* Объект завода на видео (13.09): слева текст и главы, справа вертикальный ролик в рамке телефона */
-.object-video__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,380px);grid-template-areas:"head player" "chapters player";column-gap:64px;row-gap:32px;align-items:start}
-.object-video__head{grid-area:head}
-.object-video__head .lead{max-width:52ch;margin-top:18px}
-.object-video__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;margin:32px 0 0;padding:24px 0 0;border-top:1px solid var(--line)}
-.object-video__facts div{display:grid;gap:4px}
-.object-video__facts dt{font:600 clamp(22px,2vw,28px)/1.1 var(--f-d);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
-.object-video__facts dd{margin:0;font-size:13px;color:var(--muted)}
-.object-video__player{grid-area:player;margin:0;justify-self:end;width:100%;max-width:380px}
-.object-video__screen{position:relative;aspect-ratio:9/16;overflow:hidden;background:#0f171d;border:10px solid #1b262e;box-shadow:inset 0 0 0 1px #2b3842}
-.object-video__video{display:block;width:100%;height:100%;object-fit:cover;background:#0f171d}
-.object-video__play{position:absolute;inset:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:0;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(0deg,rgba(9,18,25,.62),rgba(9,18,25,.06) 55%)}
-.object-video__play-icon{position:relative;width:72px;height:72px;border-radius:50%;background:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.3);transition:transform .2s}
-.object-video__play-icon::after{content:"";position:absolute;left:29px;top:22px;border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent}
-.object-video__play:hover .object-video__play-icon{transform:scale(1.06)}
-.object-video__play-text{display:grid;gap:4px;font-weight:600;font-size:15px;text-align:center}
-.object-video__play-text small{font:11px var(--f-m);letter-spacing:.08em;text-transform:uppercase;opacity:.85}
-.object-video__player.is-playing .object-video__play{display:none}
-.object-video__cap{margin-top:12px;font:11px var(--f-m);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.object-video__chapters-wrap{grid-area:chapters}
-.object-video__chapters-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
-.object-video__chapters{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.object-video__chapter{display:grid;grid-template-columns:48px minmax(0,1fr) 20px;align-items:center;gap:14px;width:100%;min-height:48px;padding:10px 0;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer}
-.object-video__chapter .mono{font-size:13px;color:var(--accent-deep)}
-.object-video__chapter svg{width:16px;height:16px;opacity:.5;transition:transform .2s,opacity .2s}
-.object-video__chapter:hover svg,.object-video__chapter.is-active svg{opacity:1;transform:translateX(3px)}
-.object-video__chapter.is-active span:nth-child(2){font-weight:600}
-.object-video__chapter:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.object-video__chapters-wrap .arrow-link{margin-top:24px}
-@media(max-width:1100px){.object-video__grid{column-gap:40px;grid-template-columns:minmax(0,1fr) minmax(260px,320px)}}
-@media(max-width:900px){.object-video__grid{grid-template-columns:1fr;grid-template-areas:"head" "player" "chapters";row-gap:28px}.object-video__player{justify-self:start;max-width:340px}.object-video__facts{gap:16px 20px}}
-@media(prefers-reduced-motion:reduce){.object-video__play-icon,.object-video__chapter svg{transition:none}}
 
 /* 25.09: у передела без реального фото — текстовая карточка (ИИ-кадры сняты перед запуском) */
 .prod-card--text{justify-content:flex-end;background:var(--paper-2);min-height:220px}

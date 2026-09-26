@@ -1,0 +1,60 @@
+/* pages.css — вёрстка внутренних страниц (дорожка inner, 26.09).
+   Подключается в layout.mjs строго после experience.css: правила ниже
+   переопределяют site.css / experience.css, сами эти файлы не трогаем. */
+
+/* /proizvodstvo/: текстовые карточки переделов (без реального кадра) —
+   текст сверху, без растягивания по высоте соседней фото-карточки. */
+.prod-grid { align-items: start; }
+.prod-card--text { justify-content: flex-start; min-height: 0; }
+
+/* /partneram/, «Кого ищем»: в узкой колонке .split — две колонки вместо четырёх */
+.split .hero__stats--flat { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
+
+/* Плитки в статьях журнала: длинные слова («экспертиза», «разборный»)
+   не наезжают на соседнюю плитку на 1280. */
+.article-stats { column-gap: var(--space-m); }
+.article-stats .stat__val { font-size: var(--step-3); overflow-wrap: break-word; }
+
+/* /dokumentaciya/: все семь категорий ТЗ §15 — индекс в две колонки */
+.doc-index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); }
+.doc-index .doc-cat { display: grid; gap: var(--space-s); align-content: start; }
+.doc-index .doc-cat__title { margin: 0; }
+.doc-cat__num { margin: 0; font-size: 0.75rem; letter-spacing: 0.12em; color: var(--accent-deep); }
+.doc-cat__note { margin: 0; color: var(--muted); max-width: 60ch; }
+.doc-cat--wide { grid-column: 1 / -1; }
+@media (max-width: 720px) {
+  .doc-index { grid-template-columns: minmax(0, 1fr); }
+  .doc-row { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: var(--space-s); row-gap: 6px; align-items: start; padding-inline: var(--space-s); }
+  .doc-row__meta { grid-column: 2; margin-left: 0; white-space: normal; }
+}
+
+/* Галерея из трёх кадров (зернохранилища): первый — на всю ширину */
+.tech-media__item:first-child:nth-last-child(3) { grid-column: 1 / -1; }
+
+/* /tekhnologii/lstk/: кадр профиля — смысловая часть внизу снимка */
+.tech-media__item img[src*='/tech-lstk-1-'] { object-position: 50% 78%; }
+
+/* /tekhnologii/*: строка направления на телефоне — заголовок и текст
+   в одной колонке, стрелка справа на обе строки. */
+@media (max-width: 720px) {
+  .tech-row { grid-template-columns: minmax(0, 1fr) 24px; row-gap: 6px; }
+  .tech-row__title, .tech-row__text { grid-column: 1; }
+  .tech-row__arrow { grid-column: 2; grid-row: 1 / 3; }
+
+  /* /profili/: компактная таблица сортамента прокручивается, а не ломает ячейки */
+  .table--compact { min-width: max-content; }
+  .table--compact td:last-child { white-space: nowrap; }
+}
+
+/* Строки решений на узком телефоне: номер над заголовком, стрелка справа */
+@media (max-width: 560px) {
+  .sol-row { grid-template-columns: minmax(0, 1fr) 24px; padding-inline: 16px; row-gap: 4px; }
+  .sol-row--flag { padding-left: 13px; }
+  .sol-row__num { grid-column: 1; grid-row: 1; }
+  .sol-row__body { grid-column: 1; grid-row: 2; }
+  .sol-row__meta { grid-column: 1; grid-row: 3; justify-content: flex-start; text-align: left; }
+  .sol-row__arrow { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  .sol-row--nonum .sol-row__body { grid-row: 1; }
+  .sol-row--nonum .sol-row__meta { grid-row: 2; }
+  .sol-row__title { overflow-wrap: break-word; font-size: 18px; }
+}

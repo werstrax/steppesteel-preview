@@ -702,4 +702,30 @@
       if (sec) io.observe(sec);
     });
   })();
+
+  /* --- Первый экран главной: облёт объекта с дрона (27.09.2026) -------------------
+     Фото — LCP и запасной вариант; видео подключается после load, только на широких
+     экранах, без prefers-reduced-motion и без Save-Data/2G; вне экрана — пауза. */
+  (function heroVideo() {
+    var v = $('[data-hero-video]');
+    if (!v || reduced || window.innerWidth < 700) return;
+    var c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g/.test(c.effectiveType || ''))) return;
+    function start() {
+      v.preload = 'auto';
+      v.addEventListener('playing', function () { v.classList.add('is-on'); }, { once: true });
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) {
+          en.forEach(function (x) {
+            if (x.isIntersecting) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+            else v.pause();
+          });
+        }, { threshold: 0.1 }).observe(v);
+      }
+    }
+    if (document.readyState === 'complete') setTimeout(start, 400);
+    else window.addEventListener('load', function () { setTimeout(start, 400); }, { once: true });
+  })();
 })();
